@@ -1,0 +1,11 @@
+{
+  "name": "trans",
+  "version": "0.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-mochelec": "github:hakovala/gulp-mochelec",
+    "gulp-util": "^3.0.7",
+    "node-notifier": "^4.6.1"
+  }
+}
