@@ -36,7 +36,7 @@ function notifyPass() {
 }
 
 gulp.task('test', () => {
-	gulp.src('./test/test-dom-util.js', { read: false })
+	gulp.src('./test/*.js', { read: false })
 		.pipe(mochelec({
 			renderer: true,
 		}))
