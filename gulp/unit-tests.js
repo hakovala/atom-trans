@@ -5,7 +5,6 @@ const gulp = require('gulp');
 const gutil = require('gulp-util');
 const mochelec = require('gulp-mochelec');
 const notifier = require('node-notifier');
-const notify = require('gulp-notify');
 const through = require('through2');
 
 const TIMEOUT_PASS = 2000;
