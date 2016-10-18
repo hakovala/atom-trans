@@ -235,5 +235,9 @@ describe('DOM Util', () => {
 			let actual = domUtil.findParent(el, 'foo');
 			assert.strictEqual(false, actual);
 		});
+
+		it('should return null with non-element', () => {
+			assert.strictEqual(null, domUtil.findParent(null, 'foo'));
+		});
 	});
 });
