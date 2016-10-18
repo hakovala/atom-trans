@@ -12,6 +12,14 @@ const TIMEOUT_FAIL = 4000;
 const IMAGE_PASS = path.join(__dirname, 'img/pass.png');
 const IMAGE_FAIL = path.join(__dirname, 'img/fail.png');
 
+let files = {
+	sources: ['index.js', 'lib/**/*.js'],
+	tests: ['test/test-*.js'],
+};
+
+// generate code coverage if '--coverage' command line flag is present
+let coverage = process.argv.includes('--coverage');
+
 function notifyFailure(err) {
 	gutil.log("Failure: " + err.message);
 	notifier.notify({
@@ -23,7 +31,7 @@ function notifyFailure(err) {
 }
 
 function notifyPass() {
-	return through.obj((file, enc, cb) => {	
+	return through.obj((file, enc, cb) => {
 		notifier.notify({
 			'expire-time': TIMEOUT_PASS,
 			icon: IMAGE_PASS,
@@ -35,14 +43,17 @@ function notifyPass() {
 }
 
 gulp.task('test', () => {
-	gulp.src('./test/*.js', { read: false })
+	return gulp.src(files.tests, { read: false })
 		.pipe(mochelec({
 			renderer: true,
+			require: coverage ? 'test/support/require-coverage.js' : undefined,
+			hook: coverage ? 'test/support/hook-coverage.js' : undefined,
 		}))
 		.on('error', notifyFailure)
 		.pipe(notifyPass())
 });
 
 gulp.task('test:watch', ['test'], () => {
-	gulp.watch(['index.js', './lib/**/*.js', './test/*.js'], ['test']);
+	let files = [].concat(files.sources, files.tests);
+	gulp.watch(files, ['test']);
 });
