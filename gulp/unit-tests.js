@@ -12,13 +12,16 @@ const TIMEOUT_FAIL = 4000;
 const IMAGE_PASS = path.join(__dirname, 'img/pass.png');
 const IMAGE_FAIL = path.join(__dirname, 'img/fail.png');
 
+let args = require('minimist')(process.argv.slice(2));
+
 let files = {
 	sources: ['index.js', 'lib/**/*.js'],
-	tests: ['test/test-*.js'],
+	tests: args['test-files'] || ['test/test-*.js'],
 };
 
 // generate code coverage if '--coverage' command line flag is present
-let coverage = process.argv.includes('--coverage');
+let coverage = args.coverage;
+let test_grep = args['test-grep'];
 
 function notifyFailure(err) {
 	gutil.log("Failure: " + err.message);
@@ -48,6 +51,7 @@ gulp.task('test', () => {
 			renderer: true,
 			require: coverage ? 'test/support/require-coverage.js' : undefined,
 			hook: coverage ? 'test/support/hook-coverage.js' : undefined,
+			grep: test_grep,
 		}))
 		.on('error', notifyFailure)
 		.pipe(notifyPass())
