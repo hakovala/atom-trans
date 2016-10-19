@@ -1,0 +1,17 @@
+{
+	"opts": {
+		"template": "node_modules/jaguarjs-jsdoc",
+		"destination": "doc"
+	},
+	"plugins": [
+		"plugins/markdown"
+	],
+	"templates": {
+		"applicationName": "elec-trans",
+		"meta": {
+			"title": "Trans",
+			"description": "DOM manipulation library for Atom Electron."
+		},
+		"linenums": true
+	}
+}
