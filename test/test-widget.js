@@ -485,11 +485,16 @@ describe('Widget', () => {
 
 	describe('#last', () => {
 		it('should return last child element', () => {
-
+			let target = new Widget(query('#parent'));
+			let last = target.last();
+			assert(last instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(target.el.lastElementChild, last.el);
 		});
 
 		it('should return null if there is no child elements', () => {
-
+			let target = new Widget(query('#child-1'));
+			let last = target.last();
+			assert.strictEqual(null, last);
 		});
 	});
 
