@@ -522,6 +522,18 @@ describe('Widget', () => {
 			let item = new Widget(query('#child-1'));
 			assert.strictEqual(null, item.next('foo'));
 		});
+
+		it('should throw error with invalid argument', () => {
+			let target = new Widget(document.body);
+
+			assert.throws(() => { target.next(true); }, Error);
+			assert.throws(() => { target.next(null); }, Error);
+			assert.throws(() => { target.next(123); }, Error);
+			assert.throws(() => { target.next({}); }, Error);
+			assert.throws(() => { target.next([]); }, Error);
+			assert.throws(() => { target.next(element('div')); }, Error);
+			assert.throws(() => { target.next(new Widget(element('div'))); }, Error);
+		});
 	});
 
 	describe('#nextAll', () => {
