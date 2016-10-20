@@ -679,8 +679,32 @@ describe('Widget', () => {
 	});
 
 	describe('#matches', () => {
-		it('should return whether this matches the selector', () => {
+		it('should return true if this matches the selector', () => {
+			let item = new Widget(element('div', 'title', 'item'));
+			assert.strictEqual(true, item.matches('div'));
+			assert.strictEqual(true, item.matches('#title'));
+			assert.strictEqual(true, item.matches('.item'));
+			assert.strictEqual(true, item.matches('#title.item'));
+		});
 
+		it('should return false if this doesn\'t match the selector', () => {
+			let item = new Widget(element('div', 'title', 'item'));
+			assert.strictEqual(false, item.matches('foo'));
+			assert.strictEqual(false, item.matches('#bar'));
+			assert.strictEqual(false, item.matches('.baz'));
+		});
+
+		it('should throw error with invalid argument', () => {
+			let target = new Widget(document.body);
+
+			assert.throws(() => { target.matches(); }, Error);
+			assert.throws(() => { target.matches(true); }, Error);
+			assert.throws(() => { target.matches(null); }, Error);
+			assert.throws(() => { target.matches(123); }, Error);
+			assert.throws(() => { target.matches({}); }, Error);
+			assert.throws(() => { target.matches([]); }, Error);
+			assert.throws(() => { target.matches(element('div')); }, Error);
+			assert.throws(() => { target.matches(new Widget(element('div'))); }, Error);
 		});
 	});
 
