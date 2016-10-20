@@ -7,9 +7,9 @@ const Widget = require('../lib/widget');
 describe('Widget', () => {
 	let div;
 
+	// create element with given tag, id and class
 	function element(tag, id, classes) {
-		tag = tag || 'div';
-		let el = document.createElement(tag);
+		let el = document.createElement(tag || 'div');
 		el.id = id;
 		el.className = classes;
 		return el;
