@@ -626,15 +626,55 @@ describe('Widget', () => {
 
 	describe('#previousAll', () => {
 		it('should return all previous elements', () => {
+			let parent = query('#parent');
+			let item = new Widget(parent.children[3]);
+			let prev = item.previousAll();
+			// TODO: Assert WidgetList
 
+			for (let i = 2, l = 0; i >= 0; i--, l++) {
+				assert(prev[l] instanceof Widget, 'Expected to be instanceof Widget');
+				assert.strictEqual(prev[l].el, parent.children[i]);
+			}
 		});
 
 		it('should return all matching previous elements', () => {
+			let parent = query('#parent');
+			let item = new Widget(parent.children[3]);
+			let prev = item.previousAll('.child');
+			// TODO: Assert WidgetList
 
+			for (let i = 2, l = 0; i >= 0; i--) {
+				if (!parent.children[i].matches('.child')) continue;
+				assert(prev[l] instanceof Widget, 'Expected to be instanceof Widget');
+				assert.strictEqual(prev[l].el, parent.children[i]);
+				l++;
+			}
 		});
 
 		it('should return empty set if there is no previous', () => {
+			let item = new Widget(query('#title'));
+			let prev = item.previousAll();
+			// TODO: Assert WidgetList
+			assert.equal(0, prev.length);
+		});
 
+		it('should return empty set if there is no matching elements', () => {
+			let item = new Widget(query('#child-2'));
+			let prev = item.previousAll('foo');
+			// TODO: Assert WidgetList
+			assert.equal(0, prev.length);
+		});
+
+		it('should throw error with invalid argument', () => {
+			let target = new Widget(document.body);
+
+			assert.throws(() => { target.previousAll(true); }, Error);
+			assert.throws(() => { target.previousAll(null); }, Error);
+			assert.throws(() => { target.previousAll(123); }, Error);
+			assert.throws(() => { target.previousAll({}); }, Error);
+			assert.throws(() => { target.previousAll([]); }, Error);
+			assert.throws(() => { target.previousAll(element('div')); }, Error);
+			assert.throws(() => { target.previousAll(new Widget(element('div'))); }, Error);
 		});
 	});
 
