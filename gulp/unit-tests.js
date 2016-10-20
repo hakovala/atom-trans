@@ -6,6 +6,7 @@ const gutil = require('gulp-util');
 const mochelec = require('gulp-mochelec');
 const notifier = require('node-notifier');
 const through = require('through2');
+const livereload = require('livereload');
 
 const TIMEOUT_PASS = 2000;
 const TIMEOUT_FAIL = 4000;
@@ -23,8 +24,15 @@ let args = require('minimist')(process.argv.slice(2));
 let files = {
 	sources: ['index.js', 'lib/**/*.js'],
 	tests: args['test-files'] || ['test/test-*.js'],
+	live: ['coverage/'],
 };
 
+// start livereload server for coverage
+if (args.live) {
+		let lr = livereload.createServer({ delay: 500 });
+		console.log('watching:', files.live);
+		lr.watch(files.live);
+}
 
 function notifyFailure(err) {
 	gutil.log("Failure: " + err.message);
