@@ -572,6 +572,18 @@ describe('Widget', () => {
 			let next = item.nextAll('foo');
 			assert.equal(0, next.length);
 		});
+
+		it('should throw error with invalid argument', () => {
+			let target = new Widget(document.body);
+
+			assert.throws(() => { target.nextAll(true); }, Error);
+			assert.throws(() => { target.nextAll(null); }, Error);
+			assert.throws(() => { target.nextAll(123); }, Error);
+			assert.throws(() => { target.nextAll({}); }, Error);
+			assert.throws(() => { target.nextAll([]); }, Error);
+			assert.throws(() => { target.nextAll(element('div')); }, Error);
+			assert.throws(() => { target.nextAll(new Widget(element('div'))); }, Error);
+		});
 	});
 
 	describe('#previous', () => {
