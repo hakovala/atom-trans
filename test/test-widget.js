@@ -81,6 +81,12 @@ describe('Widget', () => {
 
 	describe('#detach', () => {
 		it('should detach itself from parent', () => {
+			let parent = query('#parent');
+			let child = query('#child-2');
+
+			let widget = new Widget(child);
+			widget.detach();
+			assert.equal(false, parent.contains(child));
 		});
 	});
 
