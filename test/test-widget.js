@@ -588,15 +588,39 @@ describe('Widget', () => {
 
 	describe('#previous', () => {
 		it('should return previous element', () => {
-
+			let item = new Widget(query('#child-2'));
+			let prev = item.previous();
+			assert(prev instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(query('#child-1'), prev.el);
 		});
 
 		it('should return previous matching element', () => {
-
+			let item = new Widget(query('#child-2'));
+			let prev = item.previous('h1');
+			assert(prev instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(query('#title'), prev.el);
 		});
 
 		it('should return null if there is no previous', () => {
+			let item = new Widget(query('#title'));
+			assert.strictEqual(null, item.previous());
+		});
 
+		it('should return null if there is no matching previous', () => {
+			let item = new Widget(query('#child-2'));
+			assert.strictEqual(null, item.previous('foo'));
+		});
+
+		it('should throw error with invalid argument', () => {
+			let target = new Widget(document.body);
+
+			assert.throws(() => { target.previous(true); }, Error);
+			assert.throws(() => { target.previous(null); }, Error);
+			assert.throws(() => { target.previous(123); }, Error);
+			assert.throws(() => { target.previous({}); }, Error);
+			assert.throws(() => { target.previous([]); }, Error);
+			assert.throws(() => { target.previous(element('div')); }, Error);
+			assert.throws(() => { target.previous(new Widget(element('div'))); }, Error);
 		});
 	});
 
