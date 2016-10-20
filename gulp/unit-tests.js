@@ -42,6 +42,7 @@ function notifyFailure(err) {
 		title: "Failed",
 		message: err.message
 	});
+	this.emit('end');
 }
 
 function notifyPass() {
