@@ -189,11 +189,33 @@ describe('Widget', () => {
 
 	describe('#prepend', () => {
 		it('should prepend Widget to parent', () => {
+			let parent = new Widget(query('#parent'));
+			let child = new Widget(element('li'));
 
+			parent.prepend(child);
+			let children = parent.el.children;
+			assert.strictEqual(child.el, children[0]);
 		});
 
 		it('should prepend HTMLElement to parent', () => {
+			let parent = new Widget(query('#parent'));
+			let child = element('li');
 
+			parent.prepend(child);
+			let children = parent.el.children;
+			assert.strictEqual(child, children[0]);
+		});
+
+		it('should throw an error with invalid argument', () => {
+			let parent = new Widget(query('#parent'));
+
+			assert.throws(() => { parent.prepend(); }, Error);
+			assert.throws(() => { parent.prepend(true); }, Error);
+			assert.throws(() => { parent.prepend(null); }, Error);
+			assert.throws(() => { parent.prepend(123); }, Error);
+			assert.throws(() => { parent.prepend('Hello'); }, Error);
+			assert.throws(() => { parent.prepend({}); }, Error);
+			assert.throws(() => { parent.prepend([]); }, Error);
 		});
 	});
 
