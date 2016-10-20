@@ -253,7 +253,51 @@ describe('Widget', () => {
 
 	describe('#insert', () => {
 		it('should insert Widget to specific index', () => {
+			let parent = new Widget(query('#parent'));
+			let child = new Widget(element('div'));
 
+			parent.insert(2, child);
+			let children = parent.el.children;
+			assert.strictEqual(child.el, children[2]);
+		});
+
+		it('should insert HTMLElement to specific index', () => {
+			let parent = new Widget(query('#parent'));
+			let child = element('div');
+
+			parent.insert(2, child);
+			let children = parent.el.children;
+			assert.strictEqual(child, children[2]);
+		});
+
+		it('should throw an error with invalid element', () => {
+			let parent = new Widget(query('#parent'));
+
+			assert.throws(() => { parent.insert(2); }, Error);
+			assert.throws(() => { parent.insert(2, true); }, Error);
+			assert.throws(() => { parent.insert(2, null); }, Error);
+			assert.throws(() => { parent.insert(2, 123); }, Error);
+			assert.throws(() => { parent.insert(2, 'Hello'); }, Error);
+			assert.throws(() => { parent.insert(2, {}); }, Error);
+			assert.throws(() => { parent.insert(2, []); }, Error);
+		});
+
+		it('should insert to first if index smaller than zero', () => {
+			let parent = new Widget(query('#parent'));
+			let child = element('div');
+
+			parent.insert(-1, child);
+			let children = parent.el.children;
+			assert.strictEqual(child, children[0]);
+		});
+
+		it('should insert to last if index greater than children count', () => {
+			let parent = new Widget(query('#parent'));
+			let child = element('div');
+
+			parent.insert(parent.el.children.length, child);
+			let children = parent.el.children;
+			assert.strictEqual(child, children[children.length - 1]);
 		});
 	});
 
