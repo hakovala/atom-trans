@@ -68,6 +68,75 @@ describe('Widget', () => {
 		});
 	});
 
+	describe('#remove', () => {
+	});
+
+	describe('#detach', () => {
+	});
+
 	describe('#append', () => {
+	});
+
+	describe('#appendTo', () => {
+	});
+
+	describe('#prepend', () => {
+	});
+
+	describe('#prependTo', () => {
+	});
+
+	describe('#insert', () => {
+	});
+
+	describe('#insertAfter', () => {
+	});
+
+	describe('#insertBefore', () => {
+	});
+
+	describe('#replace', () => {
+	});
+
+	describe('#replaceWith', () => {
+	});
+
+	describe('#find', () => {
+	});
+
+	describe('#first', () => {
+	});
+
+	describe('#last', () => {
+	});
+
+	describe('#next', () => {
+	});
+
+	describe('#nextAll', () => {
+	});
+
+	describe('#previous', () => {
+	});
+
+	describe('#previousAll', () => {
+	});
+
+	describe('#matches', () => {
+	});
+
+	describe('#parent', () => {
+	});
+
+	describe('#parents', () => {
+	});
+
+	describe('#children', () => {
+	});
+
+	describe('#siblings', () => {
+	});
+
+	describe('#closest', () => {
 	});
 });
