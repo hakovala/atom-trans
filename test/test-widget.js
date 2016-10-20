@@ -371,11 +371,33 @@ describe('Widget', () => {
 
 	describe('#replace', () => {
 		it('should replace Widget with self', () => {
+			let parent = query('#parent');
+			let child = new Widget(element('div'));
+			let other = new Widget(parent.children[2]);
 
+			child.replace(other);
+			assert.strictEqual(child.el, parent.children[2]);
 		});
 
 		it('should replace HTMLElement with self', () => {
+			let parent = query('#parent');
+			let child = new Widget(element('div'));
+			let other = parent.children[2];
 
+			child.replace(other);
+			assert.strictEqual(child.el, parent.children[2]);
+		});
+
+		it('should throw an error with invalid argument', () => {
+			let child = new Widget(element('li'));
+
+			assert.throws(() => { child.replace(); }, Error);
+			assert.throws(() => { child.replace(true); }, Error);
+			assert.throws(() => { child.replace(null); }, Error);
+			assert.throws(() => { child.replace(123); }, Error);
+			assert.throws(() => { child.replace('Hello'); }, Error);
+			assert.throws(() => { child.replace({}); }, Error);
+			assert.throws(() => { child.replace([]); }, Error);
 		});
 	});
 
