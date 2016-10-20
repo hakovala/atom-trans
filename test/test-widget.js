@@ -303,11 +303,35 @@ describe('Widget', () => {
 
 	describe('#insertAfter', () => {
 		it('should insert Widget after another Widget', () => {
+			let parent = query('#parent');
+			let child = new Widget(element('div'));
+			let other = new Widget(parent.children[2]);
 
+			child.insertAfter(other);
+			let children = parent.children;
+			assert.strictEqual(child.el, children[3]);
 		});
 
 		it('should insert Widget after another HTMLElement', () => {
+			let parent = query('#parent');
+			let child = new Widget(element('div'));
+			let other = parent.children[2];
 
+			child.insertAfter(other);
+			let children = parent.children;
+			assert.strictEqual(child.el, children[3]);
+		});
+
+		it('should throw an error with invalid argument', () => {
+			let child = new Widget(element('li'));
+
+			assert.throws(() => { child.insertAfter(); }, Error);
+			assert.throws(() => { child.insertAfter(true); }, Error);
+			assert.throws(() => { child.insertAfter(null); }, Error);
+			assert.throws(() => { child.insertAfter(123); }, Error);
+			assert.throws(() => { child.insertAfter('Hello'); }, Error);
+			assert.throws(() => { child.insertAfter({}); }, Error);
+			assert.throws(() => { child.insertAfter([]); }, Error);
 		});
 	});
 
