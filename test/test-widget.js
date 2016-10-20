@@ -40,7 +40,7 @@ describe('Widget', () => {
 				<h1 id="title">Hello, Title!</h1>
 				<div id="child-1" class="child"></div>
 				<div id="child-2" class="child"></div>
-				<div id="child-3" class="child"></div>
+				<div id="child-3" class="child last"></div>
 			</div>
 			<p id="other">Hello, Other!</p>
 		`;
@@ -500,15 +500,27 @@ describe('Widget', () => {
 
 	describe('#next', () => {
 		it('should return next element', () => {
-
+			let item = new Widget(query('#child-1'));
+			let next = item.next();
+			assert(next instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(query('#child-2'), next.el);
 		});
 
 		it('should return next matching element', () => {
-
+			let item = new Widget(query('#child-1'));
+			let next = item.next('#child-3');
+			assert(next instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(query('#child-3'), next.el);
 		});
 
 		it('should return null if there is no next', () => {
+			let item = new Widget(query('#child-3'));
+			assert.strictEqual(null, item.next());
+		});
 
+		it('should return null if there is no matching next', () => {
+			let item = new Widget(query('#child-1'));
+			assert.strictEqual(null, item.next('foo'));
 		});
 	});
 
