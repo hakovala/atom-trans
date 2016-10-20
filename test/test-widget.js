@@ -15,6 +15,17 @@ describe('Widget', () => {
 		return el;
 	}
 
+	// query element with selector from parent
+	function query(selector, parent) {
+		parent = parent || document;
+		return parent.querySelector(selector);
+	}
+
+	// convert a array-like object to array
+	function toArray(list) {
+		return [].slice.call(list);
+	}
+
 	beforeEach(() => {
 		// ensure that we have a clean Element to play with
 		div = element();
