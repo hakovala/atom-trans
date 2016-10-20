@@ -470,11 +470,16 @@ describe('Widget', () => {
 
 	describe('#first', () => {
 		it('should return first child element', () => {
-
+			let target = new Widget(query('#parent'));
+			let first = target.first();
+			assert(first instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(target.el.firstElementChild, first.el);
 		});
 
 		it('should return null if there is no child elements', () => {
-
+			let target = new Widget(query('#child-1'));
+			let first = target.first();
+			assert.strictEqual(null, first);
 		});
 	});
 
