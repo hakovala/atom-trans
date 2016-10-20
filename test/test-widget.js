@@ -69,74 +69,254 @@ describe('Widget', () => {
 	});
 
 	describe('#remove', () => {
+		it('should remove child using Widget', () => {
+		});
+
+		it('should remove child using HTMLElement', () => {
+		});
+
+		it('should remove child using selector', () => {
+		});
 	});
 
 	describe('#detach', () => {
+		it('should detach itself from parent', () => {
+		});
 	});
 
 	describe('#append', () => {
+		it('should append Widget to parent', () => {
+
+		});
+
+		it('should append HTMLElement to parent', () => {
+
+		});
 	});
 
 	describe('#appendTo', () => {
+		it('should append self to parent Widget', () => {
+
+		});
+
+		it('should append self to parent HTMLElement', () => {
+
+		});
 	});
 
 	describe('#prepend', () => {
+		it('should prepend Widget to parent', () => {
+
+		});
+
+		it('should prepend HTMLElement to parent', () => {
+
+		});
 	});
 
 	describe('#prependTo', () => {
+		it('should prepend self to parent Widget', () => {
+
+		});
+
+		it('should prepend self to parent HTMLElement', () => {
+
+		});
 	});
 
 	describe('#insert', () => {
+		it('should insert Widget to specific index', () => {
+
+		});
 	});
 
 	describe('#insertAfter', () => {
+		it('should insert Widget after another Widget', () => {
+
+		});
+
+		it('should insert Widget after another HTMLElement', () => {
+
+		});
 	});
 
 	describe('#insertBefore', () => {
+		it('should insert Widget before another Widget', () => {
+
+		});
+
+		it('should insert Widget before another HTMLElement', () => {
+
+		});
 	});
 
 	describe('#replace', () => {
+		it('should replace Widget with self', () => {
+
+		});
+
+		it('should replace HTMLElement with self', () => {
+
+		});
 	});
 
 	describe('#replaceWith', () => {
+		it('should replace self with Widget', () => {
+
+		});
+
+		it('should replace self with HTMLElement', () => {
+
+		});
 	});
 
 	describe('#find', () => {
+		it('should return matching child elements', () => {
+
+		});
 	});
 
 	describe('#first', () => {
+		it('should return first child element', () => {
+
+		});
+
+		it('should return null if there is no child elements', () => {
+
+		});
 	});
 
 	describe('#last', () => {
+		it('should return last child element', () => {
+
+		});
+
+		it('should return null if there is no child elements', () => {
+
+		});
 	});
 
 	describe('#next', () => {
+		it('should return next element', () => {
+
+		});
+
+		it('should return next matching element', () => {
+
+		});
+
+		it('should return null if there is no next', () => {
+
+		});
 	});
 
 	describe('#nextAll', () => {
+		it('should return all next elements', () => {
+
+		});
+
+		it('should return all matching next elements', () => {
+
+		});
+
+		it('should return empty set if there is no next', () => {
+
+		});
 	});
 
 	describe('#previous', () => {
+		it('should return previous element', () => {
+
+		});
+
+		it('should return previous matching element', () => {
+
+		});
+
+		it('should return null if there is no previous', () => {
+
+		});
 	});
 
 	describe('#previousAll', () => {
+		it('should return all previous elements', () => {
+
+		});
+
+		it('should return all matching previous elements', () => {
+
+		});
+
+		it('should return empty set if there is no previous', () => {
+
+		});
 	});
 
 	describe('#matches', () => {
+		it('should return whether this matches the selector', () => {
+
+		});
 	});
 
 	describe('#parent', () => {
+		it('should return parent', () => {
+
+		});
+
+		it('should return null if there is no parent', () => {
+
+		});
+
+		it('should return parent that matches selector', () => {
+
+		});
+
+		it('should return null if no parent matches the selector', () => {
+
+		});
 	});
 
 	describe('#parents', () => {
+		it('should return all parents', () => {
+
+		});
+
+		it('should return empty set if there is no parents', () => {
+
+		});
+
+		it('should return all matching parents', () => {
+
+		});
 	});
 
 	describe('#children', () => {
+		it('should return all children', () => {
+
+		});
+
+		it('should return all matching children', () => {
+
+		});
 	});
 
 	describe('#siblings', () => {
+		it('should return all siblings', () => {
+
+		});
+
+		it('should return all matching siblings', () => {
+
+		});
 	});
 
 	describe('#closest', () => {
+		it('should return self without selector', () => {
+
+		});
+
+		it('should return closest matching element', () => {
+
+		});
 	});
 });
