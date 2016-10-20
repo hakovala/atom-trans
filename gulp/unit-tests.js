@@ -14,14 +14,17 @@ const IMAGE_FAIL = path.join(__dirname, 'img/fail.png');
 
 let args = require('minimist')(process.argv.slice(2));
 
+// Command line arguments:
+// `coverage`: generate code coverage from unit tests
+// 'live': start livereload server watching coverage reports
+// 'test-files': unit test files to run as glob patterns
+// 'test-grep': grep pattern to filter unit tests
+
 let files = {
 	sources: ['index.js', 'lib/**/*.js'],
 	tests: args['test-files'] || ['test/test-*.js'],
 };
 
-// generate code coverage if '--coverage' command line flag is present
-let coverage = args.coverage;
-let test_grep = args['test-grep'];
 
 function notifyFailure(err) {
 	gutil.log("Failure: " + err.message);
@@ -49,15 +52,14 @@ gulp.task('test', () => {
 	return gulp.src(files.tests, { read: false })
 		.pipe(mochelec({
 			renderer: true,
-			require: coverage ? 'test/support/require-coverage.js' : undefined,
-			hook: coverage ? 'test/support/hook-coverage.js' : undefined,
-			grep: test_grep,
+			require: args.coverage ? 'test/support/require-coverage.js' : undefined,
+			hook: args.coverage ? 'test/support/hook-coverage.js' : undefined,
+			grep: args['test-grep'],
 		}))
 		.on('error', notifyFailure)
 		.pipe(notifyPass())
 });
 
 gulp.task('test:watch', ['test'], () => {
-	let files = [].concat(files.sources, files.tests);
-	gulp.watch(files, ['test']);
+	gulp.watch([].concat(files.sources, files.tests), ['test']);
 });
