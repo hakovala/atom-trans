@@ -435,7 +435,36 @@ describe('Widget', () => {
 
 	describe('#find', () => {
 		it('should return matching child elements', () => {
+			let res;
+			let body = new Widget(document.body);
 
+			res = body.find('#parent');
+			assert.equal(1, res.length);
+			assert(res[0] instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(query('#parent'), res[0].el);
+
+			res = body.find('.child');
+			assert.equal(3, res.length);
+		});
+
+		it('should return empty set if no matching found', () => {
+			let body = new Widget(document.body);
+
+			let res = body.find('foo');
+			assert.equal(0, res.length);
+		});
+
+		it('should throw error with invalid argument', () => {
+			let body = new Widget(document.body);
+
+			assert.throws(() => { body.find(); }, Error);
+			assert.throws(() => { body.find(true); }, Error);
+			assert.throws(() => { body.find(null); }, Error);
+			assert.throws(() => { body.find(123); }, Error);
+			assert.throws(() => { body.find({}); }, Error);
+			assert.throws(() => { body.find([]); }, Error);
+			assert.throws(() => { body.find(element('div')); }, Error);
+			assert.throws(() => { body.find(new Widget(element('div'))); }, Error);
 		});
 	});
 
