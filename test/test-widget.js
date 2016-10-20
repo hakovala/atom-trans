@@ -1,5 +1,6 @@
 "use strict";
 
+const helper = require('./helper');
 const assert = require('./assert-dom');
 
 const Widget = require('../lib/widget');
