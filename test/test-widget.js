@@ -526,15 +526,39 @@ describe('Widget', () => {
 
 	describe('#nextAll', () => {
 		it('should return all next elements', () => {
+			let parent = query('#parent');
+			let item = new Widget(parent.children[1]);
+			let next = item.nextAll();
 
+			for (let i = 2, l = 0; i < parent.children.length; i++, l++) {
+				assert(next[l] instanceof Widget, 'Expected to be instanceof Widget');
+				assert.strictEqual(next[l].el, parent.children[i]);
+			}
 		});
 
 		it('should return all matching next elements', () => {
+			let parent = query('#parent');
+			let item = new Widget(parent.children[1]);
+			let next = item.nextAll('.last');
 
+			for (let i = 2, l = 0; i < parent.children.length; i++) {
+				if (!parent.children[i].matches('.last')) continue;
+				assert(next[l] instanceof Widget, 'Expected to be instanceof Widget');
+				assert.strictEqual(next[l].el, parent.children[i]);
+				l++;
+			}
 		});
 
 		it('should return empty set if there is no next', () => {
+			let item = new Widget(query('#child-3'));
+			let next = item.nextAll();
+			assert.equal(0, next.length);
+		});
 
+		it('shoud return empty set if there is no matching next', () => {
+			let item = new Widget(query('#child-1'));
+			let next = item.nextAll('foo');
+			assert.equal(0, next.length);
 		});
 	});
 
