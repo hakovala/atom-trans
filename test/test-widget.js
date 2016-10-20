@@ -51,22 +51,17 @@ describe('Widget', () => {
 			assert.strictEqual(div, widget.el);
 		});
 
-
 		it('should create instance of Widget', () => {
 			assert((new Widget(div)) instanceof Widget);
 			assert((Widget(div)) instanceof Widget);
 		});
+
+		it('should have read-only element', () => {
+			let widget = new Widget(div);
+			assert.throws(() => { widget.el = element(); }, TypeError);
+		});
 	});
 
 	describe('#append', () => {
-		let parent, child;
-		beforeEach(() => {
-			parent = new Widget(element('div', 'parent'));
-			child = new Widget(element('div', 'child'))
-		});
-
-		it('should append child', () =>  {
-			parent.append(child);
-		});
 	});
 });
