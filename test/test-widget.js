@@ -29,8 +29,14 @@ describe('Widget', () => {
 	beforeEach(() => {
 		// ensure that we have a clean Element to play with
 		div = element();
-		// also that we have clean 'document.body'
-		document.body.innerHTML = '';
+		// also that we have clean test content in 'document.body'
+		document.body.innerHTML = `
+			<div id="parent">
+				<div id="child-1"></div>
+				<div id="child-1"></div>
+				<div id="child-1"></div>
+			</div>
+		`;
 	});
 
 	describe('constructor', () => {
