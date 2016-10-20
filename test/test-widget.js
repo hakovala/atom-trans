@@ -35,11 +35,13 @@ describe('Widget', () => {
 		div = element();
 		// also that we have clean test content in 'document.body'
 		document.body.innerHTML = `
-			<div id="parent">
-				<div id="child-1"></div>
-				<div id="child-1"></div>
-				<div id="child-1"></div>
+			<div id="parent" class="parent">
+				<h1 id="title">Hello, Title!</h1>
+				<div id="child-1" class="child"></div>
+				<div id="child-2" class="child"></div>
+				<div id="child-3" class="child"></div>
 			</div>
+			<p id="other">Hello, Other!</p>
 		`;
 	});
 
