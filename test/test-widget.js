@@ -21,6 +21,10 @@ describe('Widget', () => {
 		return parent.querySelector(selector);
 	}
 
+	function contains(selector, parent) {
+		return query(selector, parent) === null;
+	}
+
 	// convert a array-like object to array
 	function toArray(list) {
 		return [].slice.call(list);
