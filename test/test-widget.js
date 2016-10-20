@@ -70,12 +70,44 @@ describe('Widget', () => {
 
 	describe('#remove', () => {
 		it('should remove child using Widget', () => {
+			let parent = new Widget(query('#parent'));
+			let child = new Widget(query('#child-1'));
+
+			parent.remove(child);
+			assert.equal(false, parent.el.contains(child.el), 'Child was not removed');
 		});
 
 		it('should remove child using HTMLElement', () => {
+			let parent = new Widget(query('#parent'));
+			let child = query('#child-1');
+
+			parent.remove(child);
+			assert.equal(false, parent.el.contains(child.el), 'Child was not removed');
 		});
 
 		it('should remove child using selector', () => {
+			let parent = new Widget(query('#parent'));
+
+			assert.equal(4, parent.el.children.length, 'Failed pre-test child count check');
+
+			parent.remove('#child-1');
+			assert.equal(3, parent.el.children.length);
+			assert.equal(false, contains('#child-1', parent.el));
+
+			parent.remove('.child');
+			assert.equal(1, parent.el.children.length);
+			assert.equal(true, contains('#title', parent.el));
+		});
+
+		it('should throw an error with invalid argument', () => {
+			let parent = new Widget(query('#parent'));
+
+			assert.throws(() => { parent.remove(); }, Error);
+			assert.throws(() => { parent.remove(null); }, Error);
+			assert.throws(() => { parent.remove(123); }, Error);
+			assert.throws(() => { parent.remove(function() {}); }, Error);
+			assert.throws(() => { parent.remove({}); }, Error);
+			assert.throws(() => { parent.remove([]); }, Error);
 		});
 	});
 
