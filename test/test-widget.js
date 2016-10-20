@@ -337,11 +337,35 @@ describe('Widget', () => {
 
 	describe('#insertBefore', () => {
 		it('should insert Widget before another Widget', () => {
+			let parent = query('#parent');
+			let child = new Widget(element('div'));
+			let other = new Widget(parent.children[2]);
 
+			child.insertBefore(other);
+			let children = parent.children;
+			assert.strictEqual(child.el, children[2]);
 		});
 
 		it('should insert Widget before another HTMLElement', () => {
+			let parent = query('#parent');
+			let child = new Widget(element('div'));
+			let other = parent.children[2];
 
+			child.insertBefore(other);
+			let children = parent.children;
+			assert.strictEqual(child.el, children[2]);
+		});
+
+		it('should throw an error with invalid argument', () => {
+			let child = new Widget(element('li'));
+
+			assert.throws(() => { child.insertBefore(); }, Error);
+			assert.throws(() => { child.insertBefore(true); }, Error);
+			assert.throws(() => { child.insertBefore(null); }, Error);
+			assert.throws(() => { child.insertBefore(123); }, Error);
+			assert.throws(() => { child.insertBefore('Hello'); }, Error);
+			assert.throws(() => { child.insertBefore({}); }, Error);
+			assert.throws(() => { child.insertBefore([]); }, Error);
 		});
 	});
 
