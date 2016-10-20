@@ -40,7 +40,7 @@ describe('Widget', () => {
 	});
 
 	describe('constructor', () => {
-		it('should have no Element', () => {
+		it('should throw an Error without element', () => {
 			assert.throws(() => {
 				let widget = new Widget();
 			}, Error, 'Expected "not an element" error.');
