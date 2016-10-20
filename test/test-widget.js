@@ -22,7 +22,7 @@ describe('Widget', () => {
 	}
 
 	function contains(selector, parent) {
-		return query(selector, parent) === null;
+		return query(selector, parent) !== null;
 	}
 
 	// convert a array-like object to array
