@@ -157,11 +157,33 @@ describe('Widget', () => {
 
 	describe('#appendTo', () => {
 		it('should append self to parent Widget', () => {
+			let parent = new Widget(query('#parent'));
+			let child = new Widget(element('li'));
 
+			child.appendTo(parent);
+			let children = parent.el.children;
+			assert.strictEqual(child.el, children[children.length - 1]);
 		});
 
 		it('should append self to parent HTMLElement', () => {
+			let parent = query('#parent');
+			let child = new Widget(element('li'));
 
+			child.appendTo(parent);
+			let children = parent.children;
+			assert.strictEqual(child.el, children[children.length - 1]);
+		});
+
+		it('should throw an error with invalid argument', () => {
+			let child = new Widget(element('li'));
+
+			assert.throws(() => { child.appendTo(); }, Error);
+			assert.throws(() => { child.appendTo(true); }, Error);
+			assert.throws(() => { child.appendTo(null); }, Error);
+			assert.throws(() => { child.appendTo(123); }, Error);
+			assert.throws(() => { child.appendTo('Hello'); }, Error);
+			assert.throws(() => { child.appendTo({}); }, Error);
+			assert.throws(() => { child.appendTo([]); }, Error);
 		});
 	});
 
