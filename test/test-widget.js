@@ -855,11 +855,50 @@ describe('Widget', () => {
 
 	describe('#siblings', () => {
 		it('should return all siblings', () => {
+			let parent = query('#parent');
+			let target = new Widget(query('#child-2'));
 
+			let expected = Array.from(parent.children).filter((e) => e !== target.el);
+			let actual = target.siblings();
+
+			assert.equal(expected.length, actual.length);
+			for (let i = 0; i < expected.length; i++) {
+				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
+				assert.strictEqual(expected[i], actual[i].el);
+			}
 		});
 
 		it('should return all matching siblings', () => {
+			let parent = query('#parent');
+			let target = new Widget(query('#child-2'));
 
+			let expected = Array.from(parent.children).filter((e) => e !== target.el).filter((e) => e.matches('.child'));
+			let actual = target.siblings('.child');
+
+			assert.equal(expected.length, actual.length);
+			for (let i = 0; i < expected.length; i++) {
+				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
+				assert.strictEqual(expected[i], actual[i].el);
+			}
+		});
+
+		it('should return empty set if element doesn\'t have parent', () => {
+			let target = new Widget(element('div'));
+
+			let actual = target.siblings();
+			assert.equal(0, actual.length);
+		});
+
+		it('should throw error with invalid argument', () => {
+			let target = new Widget(document.body);
+
+			assert.throws(() => { target.siblings(true); }, Error);
+			assert.throws(() => { target.siblings(null); }, Error);
+			assert.throws(() => { target.siblings(123); }, Error);
+			assert.throws(() => { target.siblings({}); }, Error);
+			assert.throws(() => { target.siblings([]); }, Error);
+			assert.throws(() => { target.siblings(element('div')); }, Error);
+			assert.throws(() => { target.siblings(new Widget(element('div'))); }, Error);
 		});
 	});
 
