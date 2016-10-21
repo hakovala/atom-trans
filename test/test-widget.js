@@ -903,12 +903,36 @@ describe('Widget', () => {
 	});
 
 	describe('#closest', () => {
-		it('should return self without selector', () => {
+		it('should return closest matching element', () => {
+			let target = new Widget(query('#child-2'));
 
+			let expected = target.el.closest('body');
+			let actual = target.closest('body');
+
+			assert(actual instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(expected, actual.el);
 		});
 
-		it('should return closest matching element', () => {
+		it('should return closest matching element including self', () => {
+			let target = new Widget(query('#child-2'));
 
+			let expected = target.el;
+			let actual = target.closest('div');
+
+			assert(actual instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(expected, actual.el);
+		});
+
+		it('should throw error with invalid argument', () => {
+			let target = new Widget(document.body);
+
+			assert.throws(() => { target.closest(true); }, Error);
+			assert.throws(() => { target.closest(null); }, Error);
+			assert.throws(() => { target.closest(123); }, Error);
+			assert.throws(() => { target.closest({}); }, Error);
+			assert.throws(() => { target.closest([]); }, Error);
+			assert.throws(() => { target.closest(element('div')); }, Error);
+			assert.throws(() => { target.closest(new Widget(element('div'))); }, Error);
 		});
 	});
 });
