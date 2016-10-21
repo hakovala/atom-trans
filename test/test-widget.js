@@ -751,17 +751,65 @@ describe('Widget', () => {
 		});
 	});
 
-	describe('#parents', () => {
-		it('should return all parents', () => {
+	describe('#parentAll', () => {
 
+		// helper method to get parent elements, with or without selector
+		function getParents(el, selector) {
+			let res = [];
+			let parent = el;
+			while ((parent = parent.parentNode) && parent instanceof HTMLElement) {
+				if (!selector || parent.matches(selector)) {
+					res.push(parent);
+				}
+			}
+			return res;
+		}
+
+		it('should return all parents', () => {
+			let target = new Widget(query('#child-1'));
+
+			let expected = getParents(query('#child-1'));
+			let actual = target.parentAll();
+
+			// TODO: assert instanceof WidgetList
+			assert.equal(expected.length, actual.length);
+			for (let i = 0; i < expected.length; i++) {
+				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
+				assert.strictEqual(expected[i], actual[i].el);
+			}
 		});
 
 		it('should return empty set if there is no parents', () => {
+			let target = new Widget(element('div'));
 
+			// TODO: assert instanceof WidgetList
+			assert.equal(0, target.parentAll().length);
 		});
 
 		it('should return all matching parents', () => {
+			let target = new Widget(query('#child-1'));
 
+			let expected = getParents(query('#child-1'), 'body');
+			let actual = target.parentAll('body');
+
+			// TODO: assert instanceof WidgetList
+			assert.equal(expected.length, actual.length);
+			for (let i = 0; i < expected.length; i++) {
+				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
+				assert.strictEqual(expected[i], actual[i].el);
+			}
+		});
+
+		it('should throw error with invalid argument', () => {
+			let target = new Widget(document.body);
+
+			assert.throws(() => { target.parentAll(true); }, Error);
+			assert.throws(() => { target.parentAll(null); }, Error);
+			assert.throws(() => { target.parentAll(123); }, Error);
+			assert.throws(() => { target.parentAll({}); }, Error);
+			assert.throws(() => { target.parentAll([]); }, Error);
+			assert.throws(() => { target.parentAll(element('div')); }, Error);
+			assert.throws(() => { target.parentAll(new Widget(element('div'))); }, Error);
 		});
 	});
 
