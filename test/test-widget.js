@@ -815,11 +815,41 @@ describe('Widget', () => {
 
 	describe('#children', () => {
 		it('should return all children', () => {
+			let target = new Widget(query('#parent'));
 
+			let expected = target.el.children;
+			let actual = target.children();
+
+			assert.equal(expected.length, actual.length);
+			for (let i = 0; i < expected.length; i++) {
+				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
+				assert.strictEqual(expected[i], actual[i].el);
+			}
 		});
 
 		it('should return all matching children', () => {
+			let target = new Widget(query('#parent'));
 
+			let expected = Array.from(target.el.children).filter((e) => e.matches('.child'));
+			let actual = target.children('.child');
+
+			assert.equal(expected.length, actual.length);
+			for (let i = 0; i < expected.length; i++) {
+				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
+				assert.strictEqual(expected[i], actual[i].el);
+			}
+		});
+
+		it('should throw error with invalid argument', () => {
+			let target = new Widget(document.body);
+
+			assert.throws(() => { target.children(true); }, Error);
+			assert.throws(() => { target.children(null); }, Error);
+			assert.throws(() => { target.children(123); }, Error);
+			assert.throws(() => { target.children({}); }, Error);
+			assert.throws(() => { target.children([]); }, Error);
+			assert.throws(() => { target.children(element('div')); }, Error);
+			assert.throws(() => { target.children(new Widget(element('div'))); }, Error);
 		});
 	});
 
