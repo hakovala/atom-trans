@@ -710,19 +710,44 @@ describe('Widget', () => {
 
 	describe('#parent', () => {
 		it('should return parent', () => {
+			let parent = query('#parent');
+			let child = new Widget(query('#child-1'));
 
+			let res = child.parent();
+			assert(res instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(parent, res.el);
 		});
 
 		it('should return null if there is no parent', () => {
+			let target = new Widget(element('div'));
 
+			assert.strictEqual(null, target.parent());
 		});
 
 		it('should return parent that matches selector', () => {
+			let target = new Widget(query('#child-1'));
 
+			let res = target.parent('body');
+			assert(res instanceof Widget, 'Expected to be instanceof Widget');
+			assert.strictEqual(document.body, res.el);
 		});
 
 		it('should return null if no parent matches the selector', () => {
+			let target = new Widget(query('#child-1'));
 
+			assert.strictEqual(null, target.parent('foo'));
+		});
+
+		it('should throw error with invalid argument', () => {
+			let target = new Widget(document.body);
+
+			assert.throws(() => { target.parent(true); }, Error);
+			assert.throws(() => { target.parent(null); }, Error);
+			assert.throws(() => { target.parent(123); }, Error);
+			assert.throws(() => { target.parent({}); }, Error);
+			assert.throws(() => { target.parent([]); }, Error);
+			assert.throws(() => { target.parent(element('div')); }, Error);
+			assert.throws(() => { target.parent(new Widget(element('div'))); }, Error);
 		});
 	});
 
