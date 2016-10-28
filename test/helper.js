@@ -63,6 +63,10 @@ function element(tag, id, classes) {
 	return el;
 }
 
+function array(count, fn) {
+	return Array.apply(null, Array(count)).map((x, i) => fn(i));
+}
+
 /**
  * Query Element from document or given parent.
  */
@@ -84,6 +88,7 @@ module.exports = {
 	toString,
 	inspect,
 	element,
+	array,
 	query,
 	queryAll,
 };
