@@ -2,9 +2,9 @@
 
 const assert = require('assert');
 
-module.exports = function(target) {
-	return new AssertExtra(target);
-};
+function isUndefinedOrNull(value) {
+	return (value === null || typeof value === 'undefined');
+}
 
 class AssertExtra {
 
@@ -12,11 +12,15 @@ class AssertExtra {
 		this.target = target;
 	}
 
-	static isUndefinedOrNull(target) {
-		return (target === null || typeof target === 'undefined');
+	isUndefinedOrNull() {
+		assert.ok(isUndefinedOrNull(this.target));
+		return this;
 	}
-	isUndefinedOrNull() { return AssertExtra.isUndefinedOrNull(this.target); }
 
+	notUndefinedOrNull() {
+		assert.ok(!isUndefinedOrNull(this.target));
+		return this;
+	}
 
 	fail(expected, msg, op) {
 		assert.fail(this.target, expected, msg, op);
@@ -35,6 +39,10 @@ class AssertExtra {
 		return this;
 	}
 
+	is(expected, msg) {
+		return this.equal(expected, msg);
+	}
+
 	equal(expected, msg) {
 		assert.equal(this.target, expected, msg);
 		return this;
@@ -43,6 +51,10 @@ class AssertExtra {
 	strictEqual(expected, msg) {
 		assert.strictEqual(this.target, expected, msg);
 		return this;
+	}
+
+	not(expected, msg) {
+		return this.notEqual(expected, msg);
 	}
 
 	notEqual(expected, msg) {
@@ -233,9 +245,7 @@ class AssertExtra {
 	}
 
 	hasLength(expected, msg) {
-		if (this.isUndefinedOrNull()) {
-			return this.fail(expected, msg, 'length');
-		}
+		this.notUndefinedOrNull();
 		if (this.target.length !== expected) {
 			this.fail(expected, msg, 'length');
 		}
@@ -243,9 +253,7 @@ class AssertExtra {
 	}
 
 	notLength(expected, msg) {
-		if (this.isUndefinedOrNull()) {
-			return this.fail(expected, msg, 'length');
-		}
+		this.notUndefinedOrNull();
 		if (this.target.length === expected) {
 			this.fail(expected, msg, 'length');
 		}
@@ -282,3 +290,12 @@ class AssertExtra {
 		return this;
 	}
 }
+
+module.exports = function(target) {
+	return new AssertExtra(target);
+};
+module.exports.Assert = AssertExtra;
+
+module.exports.fail = function(msg) {
+	assert.ok(false, msg);
+};
