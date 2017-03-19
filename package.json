@@ -4,13 +4,13 @@
   "main": "index.js",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-jsdoc3": "^1.0.0",
+    "gulp-jsdoc3": "^1.0.1",
     "gulp-mochelec": "github:hakovala/gulp-mochelec",
-    "gulp-util": "^3.0.7",
+    "gulp-util": "^3.0.8",
     "istanbul": "^0.4.5",
-    "jaguarjs-jsdoc": "^1.0.1",
-    "livereload": "^0.6.0",
+    "jaguarjs-jsdoc": "^1.0.2",
+    "livereload": "^0.6.2",
     "minimist": "^1.2.0",
-    "node-notifier": "^4.6.1"
+    "node-notifier": "^5.1.2"
   }
 }
