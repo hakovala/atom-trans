@@ -66,7 +66,7 @@ gulp.task('test', () => {
 			grep: args.filter,
 		}))
 		.on('error', notifyFailure)
-		.pipe(notifyPass())
+		.pipe(notifyPass());
 });
 
 gulp.task('test:watch', ['test'], () => {
