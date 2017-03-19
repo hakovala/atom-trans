@@ -60,10 +60,7 @@ describe('Widget', () => {
 		});
 
 		it('should create instance of Widget', () => {
-			// silence jshint when creating Widget without `new` keyword
-			/* jshint newcap: false */
 			assert((new Widget(div)) instanceof Widget);
-			assert((Widget(div)) instanceof Widget);
 		});
 
 		it('should have read-only element', () => {
