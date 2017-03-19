@@ -35,6 +35,9 @@ if (args.live) {
 }
 
 function notifyFailure(err) {
+	// silence jshint warning about possible strict violation (W040)
+	/* jshint validthis: true */
+
 	gutil.log("Failure: " + err.message);
 	notifier.notify({
 		'expire-time': TIMEOUT_FAIL,
