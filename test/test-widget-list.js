@@ -2,7 +2,7 @@
 "use strict";
 
 const helper = require('./helper');
-const assert = require('./assert-extra');
+const assert = require('./assert/extras');
 
 const Widget = require('../lib/widget');
 const WidgetList = require('../lib/widget-list');
