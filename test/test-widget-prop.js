@@ -85,4 +85,13 @@ describe('Widget Properties', () => {
 			assert(actual).strictEqual(expected);
 		});
 	});
+
+	describe('.style', () => {
+		it('should get CSS style', () => {
+			let expected = target.el.style;
+			let actual = target.style;
+
+			assert(actual).strictEqual(expected);
+		});
+	});
 });
