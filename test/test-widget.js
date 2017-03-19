@@ -60,6 +60,8 @@ describe('Widget', () => {
 		});
 
 		it('should create instance of Widget', () => {
+			// silence jshint when creating Widget without `new` keyword
+			/* jshint newcap: false */
 			assert((new Widget(div)) instanceof Widget);
 			assert((Widget(div)) instanceof Widget);
 		});
@@ -555,7 +557,7 @@ describe('Widget', () => {
 			let next = item.nextAll('.last');
 
 			for (let i = 2, l = 0; i < parent.children.length; i++) {
-				if (!parent.children[i].matches('.last')) continue;
+				if (!parent.children[i].matches('.last')) { continue; }
 				assert(next[l] instanceof Widget, 'Expected to be instanceof Widget');
 				assert.strictEqual(next[l].el, parent.children[i]);
 				l++;
@@ -645,7 +647,7 @@ describe('Widget', () => {
 			// TODO: Assert WidgetList
 
 			for (let i = 2, l = 0; i >= 0; i--) {
-				if (!parent.children[i].matches('.child')) continue;
+				if (!parent.children[i].matches('.child')) { continue; }
 				assert(prev[l] instanceof Widget, 'Expected to be instanceof Widget');
 				assert.strictEqual(prev[l].el, parent.children[i]);
 				l++;
