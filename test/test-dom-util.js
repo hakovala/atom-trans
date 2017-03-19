@@ -1,7 +1,7 @@
 /* jshint mocha: true */
 "use strict";
 
-const assert = require('./assert-dom');
+const assert = require('./assert/dom');
 
 const DomUtil = require('../lib/dom-util');
 
@@ -11,50 +11,50 @@ describe('DOM Util', () => {
 		function createDomUtil() {
 			return new DomUtil();
 		}
-		assert.throws(createDomUtil, Error);
+		assert(createDomUtil).throws(Error);
 	});
 
 	it('has document', () => {
-		assert.equal(document.body.tagName.toLowerCase(), 'body');
+		assert(document.body.tagName.toLowerCase()).equal('body');
 	});
 
 	function testDocument(expected, method) {
 		it(`should return ${expected} for Document`, () => {
-			assert.equal(expected, method(document));
+			assert(method(document)).is(expected);
 		});
 	}
 
 	function testElement(expected, method) {
 		it(`should return ${expected} for Element`, () => {
 			let element = document.createElement('div');
-			assert.equal(expected, method(element));
+			assert(method(element)).is(expected);
 		});
 	}
 
 	function testTextNode(expected, method) {
 		it(`should return ${expected} for TextNode`, () => {
 			let text = document.createTextNode('Hello World!');
-			assert.equal(expected, method(text));
+			assert(method(text)).is(expected);
 		});
 	}
 
 	function testDocumentFragment(expected, method) {
 		it(`should return ${expected} for DocumentFragment`, () => {
 			let fragment = document.createDocumentFragment();
-			assert.equal(expected, method(fragment));
+			assert(method(fragment)).is(expected);
 		});
 	}
 
 	function testPrimitives(expected, method) {
 		it(`should return ${expected} for JavaScript primitives`, () => {
-			assert.equal(expected, method()); // undefined
-			assert.equal(expected, method(null)); // null
-			assert.equal(expected, method(false)); // false
-			assert.equal(expected, method(true)); // true
-			assert.equal(expected, method('hello')); // string
-			assert.equal(expected, method(123)); // number
-			assert.equal(expected, method({})); // plain object
-			assert.equal(expected, method([])); // array
+			assert(method()).equal(expected); // undefined
+			assert(method(null)).equal(expected); // null
+			assert(method(false)).equal(expected); // false
+			assert(method(true)).equal(expected); // true
+			assert(method('hello')).equal(expected); // string
+			assert(method(123)).equal(expected); // number
+			assert(method({})).equal(expected); // plain object
+			assert(method([])).equal(expected); // array
 		});
 	}
 
@@ -96,16 +96,16 @@ describe('DOM Util', () => {
 
 	describe('#isHTML', () => {
 		it('should return true for HTML', () => {
-			assert.ok(DomUtil.isHTML('<div>'));
-			assert.ok(DomUtil.isHTML('<p id="foo">Hello World!</p>'));
-			assert.ok(DomUtil.isHTML('<p></p>'));
+			assert(DomUtil.isHTML('<div>')).ok();
+			assert(DomUtil.isHTML('<p id="foo">Hello World!</p>')).ok();
+			assert(DomUtil.isHTML('<p></p>')).ok();
 		});
 
 		it('should return false for non-HTML', () => {
-			assert.ok(!DomUtil.isHTML('Hello World!'));
-			assert.ok(!DomUtil.isHTML('div'));
-			assert.ok(!DomUtil.isHTML('<div'));
-			assert.ok(!DomUtil.isHTML('div>'));
+			assert(!DomUtil.isHTML('Hello World!')).ok();
+			assert(!DomUtil.isHTML('div')).ok();
+			assert(!DomUtil.isHTML('<div')).ok();
+			assert(!DomUtil.isHTML('div>')).ok();
 		});
 	});
 
@@ -118,21 +118,21 @@ describe('DOM Util', () => {
 		});
 
 		it('should return body Element', () => {
-			assert.strictEqual(document.body, DomUtil.query('body'));
+			assert(DomUtil.query('body')).strictEqual(document.body);
 		});
 
 		it('should return head Element', () => {
-			assert.strictEqual(document.head, DomUtil.query('head'));
+			assert(DomUtil.query('head')).strictEqual(document.head);
 		});
 
 		it('should return correct Element', () => {
 			let first = document.querySelector('div#first');
-			assert.strictEqual(first, DomUtil.query('div'));
-			assert.strictEqual(first, DomUtil.query('div#first'));
+			assert(DomUtil.query('div')).strictEqual(first);
+			assert(DomUtil.query('div#first')).strictEqual(first);
 
 			let second = document.querySelector('div#second');
-			assert.strictEqual(second, DomUtil.query('div#second'));
-			assert.strictEqual(second, DomUtil.query('div', first));
+			assert(DomUtil.query('div#second')).strictEqual(second);
+			assert(DomUtil.query('div', first)).strictEqual(second);
 		});
 	});
 
@@ -147,7 +147,7 @@ describe('DOM Util', () => {
 
 		it('should return Array', () => {
 			let actual = DomUtil.queryAll('body');
-			assert(actual instanceof Array);
+			assert(actual).instanceOf(Array);
 		});
 
 		it('should return correct array of Elements', () => {
@@ -155,7 +155,7 @@ describe('DOM Util', () => {
 			let actual = DomUtil.queryAll('li');
 
 			for (let i = 0; i < expected.length; i++) {
-				assert.strictEqual(expected[i], actual[i]);
+				assert(actual[i]).strictEqual(expected[i]);
 			}
 		});
 	});
@@ -165,19 +165,19 @@ describe('DOM Util', () => {
 		el.id = 'foo';
 
 		it('should return false without selector', () => {
-			assert.equal(false, DomUtil.matches(el));
+			assert(DomUtil.matches(el)).isFalse();
 		});
 
 		it('should return false for non-Elements', () => {
-			assert.equal(false, DomUtil.matches('hello', 'div'));
+			assert(DomUtil.matches('hello', 'div')).isFalse();
 		});
 
 		it('should return true for matching Element', () => {
-			assert.equal(true, DomUtil.matches(el, 'div#foo'));
+			assert(DomUtil.matches(el, 'div#foo')).isTrue();
 		});
 
 		it('should return false for non-matching Element', () => {
-			assert.equal(false, DomUtil.matches(el, 'div#bar'));
+			assert(DomUtil.matches(el, 'div#bar')).isFalse();
 		});
 	});
 
@@ -194,21 +194,21 @@ describe('DOM Util', () => {
 
 		it('should return all elements without selector', () => {
 			let actual = DomUtil.filter(elements);
-			assert.equal(elements.length, actual.length, 'should have all elements');
+			assert(actual).hasLength(elements.length, 'should have all elements');
 		});
 
 		it('should return matching elements using selector', () => {
 			let actual = DomUtil.filter(elements, '#item-2');
-			assert.equal(1, actual.length);
-			assert.hasId(actual[0], 'item-2');
+			assert(actual).hasLength(1);
+			assert(actual[0]).hasId('item-2');
 		});
 
 		it('should return matching elements using callback', () => {
 			let actual = DomUtil.filter(elements, (el) => {
 				return el.id == 'item-1';
 			});
-			assert.equal(1, actual.length);
-			assert.hasId(actual[0], 'item-1');
+			assert(actual).hasLength(1);
+			assert(actual[0]).hasId('item-1');
 		});
 	});
 
@@ -229,23 +229,24 @@ describe('DOM Util', () => {
 			let el = document.querySelector('#depth-4');
 			let expected = document.querySelector('#depth-2');
 			let actual = DomUtil.findParent(el, '#depth-2');
-			assert.strictEqual(expected, actual);
+			assert(actual).strictEqual(expected);
 		});
 
 		it('should return false if until is reached', () => {
 			let el = document.querySelector('#depth-4');
 			let actual = DomUtil.findParent(el, '#depth-2', '#depth-3');
-			assert.strictEqual(false, actual);
+			assert(actual).isFalse();
 		});
 
 		it('should return false if none found', () => {
 			let el = document.querySelector('#depth-4');
 			let actual = DomUtil.findParent(el, 'foo');
-			assert.strictEqual(false, actual);
+			assert(actual).isFalse();
 		});
 
 		it('should return null with non-element', () => {
-			assert.strictEqual(null, DomUtil.findParent(null, 'foo'));
+			let actual = DomUtil.findParent(null, 'foo');
+			assert(actual).isNull();
 		});
 	});
 });
