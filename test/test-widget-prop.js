@@ -76,4 +76,13 @@ describe('Widget Properties', () => {
 			assert(target.el.textContent).equal(text);
 		});
 	});
+
+	describe('.class', () => {
+		it('should get classList', () => {
+			let expected = target.el.classList;
+			let actual = target.class;
+
+			assert(actual).strictEqual(expected);
+		});
+	});
 });
