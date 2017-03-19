@@ -7,6 +7,13 @@ const DomUtil = require('../lib/dom-util');
 
 describe('DOM Util', () => {
 
+	it('is static class', () => {
+		function createDomUtil() {
+			return new DomUtil();
+		}
+		assert.throws(createDomUtil, Error);
+	});
+
 	it('has document', () => {
 		assert.equal(document.body.tagName.toLowerCase(), 'body');
 	});
