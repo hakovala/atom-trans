@@ -18,12 +18,12 @@ let args = require('minimist')(process.argv.slice(2));
 // Command line arguments:
 // `coverage`: generate code coverage from unit tests
 // 'live': start livereload server watching coverage reports
-// 'test-files': unit test files to run as glob patterns
+// 'tests': unit test files to run as glob patterns
 // 'test-grep': grep pattern to filter unit tests
 
 let files = {
 	sources: ['index.js', 'lib/**/*.js'],
-	tests: args['test-files'] || ['test/test-*.js'],
+	tests: args.tests || ['test/test-*.js'],
 	live: ['coverage/'],
 };
 
