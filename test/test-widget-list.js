@@ -17,16 +17,6 @@ describe('WidgetList', () => {
 				.hasLength(0);
 		});
 
-		it('should create new empty instance WidgetList', () => {
-			// silence jshint for creating WidgetList without `new` keyword
-			/* jshint newcap: false */
-			let target = WidgetList();
-
-			assert(target)
-				.instanceOf(WidgetList)
-				.hasLength(0);
-		});
-
 		it('should accept single HTMLElement as argument', () => {
 			let el = helper.element('div');
 			let target = new WidgetList(el);
