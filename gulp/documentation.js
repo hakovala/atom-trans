@@ -10,5 +10,5 @@ let files = {
 gulp.task('doc', (cb) => {
 	let config = require('../jsdoc.json');
 	gulp.src(['README.md'].concat(files.sources), { read: false })
-		.pipe(jsdoc(config, cb))
+		.pipe(jsdoc(config, cb));
 });
