@@ -2,7 +2,7 @@
 "use strict";
 
 const helper = require('./helper');
-const assert = require('./assert-dom');
+const assert = require('./assert/dom');
 
 const Widget = require('../lib/widget');
 
@@ -32,14 +32,14 @@ describe('Widget Properties', () => {
 			let expected = target.el.innerHTML;
 			let actual = target.html;
 
-			assert.equal(actual, expected);
+			assert(actual).equal(expected);
 		});
 
 		it('should set innerHTML', () => {
 			let html = '<div id="foo"></div>';
 
 			target.html = html;
-			assert.equal(target.el.innerHTML, html);
+			assert(target.el.innerHTML).equal(html);
 		});
 	});
 
@@ -48,7 +48,7 @@ describe('Widget Properties', () => {
 			let expected = target.el.outerHTML;
 			let actual = target.outerHtml;
 
-			assert.equal(actual, expected);
+			assert(actual).equal(expected);
 		});
 
 		it('should set outerHTML', () => {
@@ -56,8 +56,8 @@ describe('Widget Properties', () => {
 			let html = '<div id="foo"></div>';
 
 			target.outerHtml = html;
-			assert(helper.query('#foo') !== null);
-			assert(helper.query('#title') === null);
+			assert(helper.query('#foo')).notNull();
+			assert(helper.query('#title')).isNull();
 		});
 	});
 
@@ -66,14 +66,14 @@ describe('Widget Properties', () => {
 			let expected = target.el.textContent;
 			let actual = target.text;
 
-			assert.equal(actual, expected);
+			assert(actual).equal(expected);
 		});
 
 		it('should set textContent', () => {
 			let text = 'Hello, Test!';
 
 			target.text = text;
-			assert.equal(target.el.textContent, text);
+			assert(target.el.textContent).equal(text);
 		});
 	});
 });
