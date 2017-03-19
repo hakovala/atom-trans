@@ -19,7 +19,7 @@ let args = require('minimist')(process.argv.slice(2));
 // `coverage`: generate code coverage from unit tests
 // 'live': start livereload server watching coverage reports
 // 'tests': unit test files to run as glob patterns
-// 'test-grep': grep pattern to filter unit tests
+// 'filter': grep pattern to filter unit tests
 
 let files = {
 	sources: ['index.js', 'lib/**/*.js'],
@@ -63,7 +63,7 @@ gulp.task('test', () => {
 			renderer: true,
 			require: args.coverage ? 'test/support/require-coverage.js' : undefined,
 			hook: args.coverage ? 'test/support/hook-coverage.js' : undefined,
-			grep: args['test-grep'],
+			grep: args.filter,
 		}))
 		.on('error', notifyFailure)
 		.pipe(notifyPass())
