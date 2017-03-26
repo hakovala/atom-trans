@@ -923,6 +923,14 @@ describe('Widget', () => {
 			assert(actual.el).strictEqual(expected);
 		});
 
+		it('should return null when none found', () => {
+			let target = new Widget(query('#child-2'));
+
+			let actual = target.closest('dummy');
+
+			assert(actual).isNull();
+		});
+
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
