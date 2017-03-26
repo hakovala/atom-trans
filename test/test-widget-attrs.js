@@ -94,4 +94,36 @@ describe('Widget Attributes', () => {
 			assert(target.attr.has('none')).isFalse();
 		});
 	});
+
+	describe('.data', () => {
+		it('should get data attribute', () => {
+			let expected = 'world';
+			let actual = target.data.get('value');
+
+			assert(actual).equal(expected);
+		});
+
+		it('should add new data attribute', () => {
+			target.data.set('dummy', 'something');
+			let actual = target.el.getAttribute('data-dummy');
+			assert(actual).equal('something');
+		});
+
+		it('should change data attribute', () => {
+			target.data.set('value', 'something');
+			let actual = target.el.getAttribute('data-value');
+			assert(actual).equal('something');
+		});
+
+		it('should remove data attribute', () => {
+			target.data.remove('value');
+			let actual = target.el.hasAttribute('data-value');
+			assert(actual).isFalse();
+		});
+
+		it('should check data attribute existance', () => {
+			assert(target.data.has('value')).isTrue();
+			assert(target.data.has('none')).isFalse();
+		});
+	});
 });
