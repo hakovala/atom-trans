@@ -180,10 +180,6 @@ describe('Widget Events', () => {
 			});
 		});
 
-		describe('eventMap', () => {
-
-		});
-
 		describe('getEventTypes', () => {
 			it('should return list of all event types', () => {
 				let expected = [
