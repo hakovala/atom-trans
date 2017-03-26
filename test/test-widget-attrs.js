@@ -41,6 +41,29 @@ describe('Widget Attributes', () => {
 				let dummy = new WidgetAttributes({});
 			}).throws(Error, 'Should throw Error for missing element.');
 		});
+
+		it('should have null prefix', () => {
+			let attrs = new WidgetAttributes(target.el);
+
+			let actual = attrs.prefix;
+			assert(actual).isNull();
+		});
+
+		it('should set prefix if provided', () => {
+			let expected = 'data';
+			let attrs = new WidgetAttributes(target.el, expected);
+
+			let actual = attrs.prefix;
+			assert(actual).is(expected);
+		});
+
+		it('should prefix given name', () => {
+			let attrs = new WidgetAttributes(target.el, 'data');
+
+			let expected = 'data-dummy';
+			let actual = attrs.prefixName('dummy');
+			assert(actual).is(expected);
+		});
 	});
 
 	describe('.attr', () => {
