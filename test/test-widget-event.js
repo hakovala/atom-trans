@@ -185,6 +185,10 @@ describe('Widget Events', () => {
 				let expected = [
 					'mouse',
 					'key',
+					'form',
+					'drag',
+					'view',
+					'media',
 				];
 				assert(WidgetEvent.getEventTypes()).deepEqual(expected);
 			});
