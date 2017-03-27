@@ -373,28 +373,29 @@ describe('Widget Events', () => {
 			assert(remove_fn.lastCall.arg).equal('click');
 		});
 
-		it('should remove all listeners', () => {
+		it('should remove no listeners without callback function', () => {
 			we.addListener('mouse:click', () => {});
 			we.addListener('mouse:click', () => {});
 
 			we.removeListener('mouse:click');
-			assert(we.eventNames()).hasLength(0);
-			assert(remove_fn.callCount).equal(1);
-			assert(remove_fn.lastCall.arg).equal('click');
+			assert(we.eventNames()).hasLength(1);
+			assert(we.listeners('mouse:click')).hasLength(2);
+			assert(remove_fn.callCount).equal(0);
 		});
 
 		it('should remove capture type listeners', () => {
-			we.addListener('mouse:click', () => {}, false);
-			we.addListener('mouse:click', () => {}, true);
+			let cb = () => {};
+			we.addListener('mouse:click', cb, false);
+			we.addListener('mouse:click', cb, true);
 
-			we.removeListener('mouse:click');
+			we.removeListener('mouse:click', cb);
 			assert(we.eventNames()).hasLength(1).includes('mouse:click-capture');
 			assert(remove_fn.callCount).equal(1);
 			assert(remove_fn.lastCall.arg).equal('click');
 			assert(remove_fn.lastCall.args[2]).isFalse();
 			remove_fn.reset();
 
-			we.removeListener('mouse:click', null, true);
+			we.removeListener('mouse:click', cb, true);
 			assert(we.eventNames()).hasLength(0);
 			assert(remove_fn.callCount).equal(1);
 			assert(remove_fn.lastCall.arg).equal('click');
@@ -407,9 +408,10 @@ describe('Widget Events', () => {
 		});
 
 		it('should remove listeners with event selectors', () => {
-			we.addListener('key:press:Ctrl+Space', () => {});
+			let cb = () => {};
+			we.addListener('key:press:Ctrl+Space', cb);
 
-			we.removeListener('key:press:Space+Ctrl');
+			we.removeListener('key:press:Space+Ctrl', cb);
 			assert(we.eventNames()).hasLength(0);
 			assert(remove_fn.callCount).equal(1);
 			assert(remove_fn.lastCall.arg).equal('keypress');
