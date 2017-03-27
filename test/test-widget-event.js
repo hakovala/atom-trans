@@ -417,4 +417,82 @@ describe('Widget Events', () => {
 			assert(remove_fn.lastCall.arg).equal('keypress');
 		});
 	});
+
+	describe('removeAllListeners', () => {
+		let we;
+		let add_fn; // target elements `addEventListener` method
+		let remove_fn; // target elements `removeEventListener` method
+
+		beforeEach(() => {
+			we = new WidgetEvent(target);
+
+			simple.mock(target, 'addEventListener').callFn(function() {
+				// debug printing
+				//console.log('addEventListener(' + Array.from(arguments).join(', ') + ')');
+			});
+			add_fn = target.addEventListener;
+			simple.mock(target, 'removeEventListener').callFn(function() {
+				// debug printing
+				//console.log('removeEventListener(' + Array.from(arguments).join(', ') + ')');
+			});
+			remove_fn = target.removeEventListener;
+		});
+
+		afterEach(() => {
+			we = null;
+			// restore all mocked objects
+			simple.restore();
+		});
+
+		it('should remove non-DOM listeners', () => {
+			we.addListener('hello', () => {});
+			we.addListener('hello', () => {});
+			we.addListener('world', () => {});
+			we.addListener('world', () => {});
+
+			we.removeAllListeners('hello');
+			assert(we.eventNames()).hasLength(1)
+				.includes('world');
+		});
+
+		it('should remove all non-DOM listeners', () => {
+			we.addListener('hello', () => {});
+			we.addListener('hello', () => {});
+			we.addListener('world', () => {});
+			we.addListener('world', () => {});
+
+			we.removeAllListeners();
+			assert(we.eventNames()).hasLength(0);
+		});
+
+		it('should remove all listeners with given selector', () => {
+			we.addListener('mouse:click', () => {});
+			we.addListener('mouse:click', () => {}, true);
+			we.addListener('key:press', () => {});
+			we.addListener('key:press', () => {}, true);
+
+			we.removeAllListeners('key:press');
+			assert(we.eventNames()).hasLength(2)
+				.includes('mouse:click')
+				.includes('mouse:click-capture');
+			assert(remove_fn.callCount).equal(2);
+		});
+
+		it('should remove all listeners', () => {
+			we.addListener('mouse:click', () => {});
+			we.addListener('mouse:click', () => {}, true);
+			we.addListener('key:press', () => {});
+			we.addListener('key:press', () => {}, true);
+
+			we.removeAllListeners();
+			assert(we.eventNames()).hasLength(0);
+			assert(remove_fn.callCount).equal(4);
+
+			// assert that the proper event names were removed
+			let event_names = remove_fn.calls.map((call) => {
+				return call.args[0];
+			});
+			assert(event_names).deepEqual(['click', 'click', 'keypress', 'keypress']);
+		});
+	});
 });
