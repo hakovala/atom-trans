@@ -73,6 +73,36 @@ describe('Widget Events', () => {
 		});
 
 		describe('formatSelector', () => {
+			it('should throw error for missing which', () => {
+				assert(() => {
+					WidgetEvent.formatSelector({ which: undefined });
+				}).throws(Error);
+			});
+
+			it('should return formatted selector string', () => {
+				let actual;
+
+				actual = WidgetEvent.formatSelector({ which: 'space', alt: false, ctrl: false, shift: false, meta: false});
+				assert(actual).equal('space');
+
+				actual = WidgetEvent.formatSelector({ which: 'space', alt: true, ctrl: false, shift: false, meta: false});
+				assert(actual).equal('alt+space');
+
+				actual = WidgetEvent.formatSelector({ which: 'space', alt: true, ctrl: true, shift: false, meta: false});
+				assert(actual).equal('alt+ctrl+space');
+
+				actual = WidgetEvent.formatSelector({ which: 'space', alt: true, ctrl: true, shift: true, meta: false});
+				assert(actual).equal('alt+ctrl+shift+space');
+
+				actual = WidgetEvent.formatSelector({ which: 'space', alt: true, ctrl: true, shift: true, meta: true});
+				assert(actual).equal('alt+ctrl+shift+meta+space');
+
+				actual = WidgetEvent.formatSelector({ which: 'space', alt: false, ctrl: true, shift: true, meta: false});
+				assert(actual).equal('ctrl+shift+space');
+			});
+		});
+
+		describe('parseSelector', () => {
 			it('should throw Error with non-string selector', () => {
 				assert(() => {
 					WidgetEvent.parseSelector({});
