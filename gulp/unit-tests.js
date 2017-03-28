@@ -6,14 +6,20 @@ const gutil = require('gulp-util');
 const mochelec = require('gulp-mochelec');
 const notifier = require('node-notifier');
 const through = require('through2');
-const livereload = require('livereload');
+const lr_server = require('gulp-server-livereload');
 
 const TIMEOUT_PASS = 2000;
 const TIMEOUT_FAIL = 4000;
 const IMAGE_PASS = path.join(__dirname, 'img/pass.png');
 const IMAGE_FAIL = path.join(__dirname, 'img/fail.png');
+const COVERAGE_PORT = 48000;
 
-let args = require('minimist')(process.argv.slice(2));
+let args = require('minimist')(process.argv.slice(2), {
+	boolean: [
+		'coverage', // generate code coverage when running unit tests
+		'open', // open coverage report in browser when starting `test:watch`
+	],
+});
 
 // Command line arguments:
 // `coverage`: generate code coverage from unit tests
@@ -26,13 +32,6 @@ let files = {
 	tests: args.tests || ['test/test-*.js'],
 	live: ['coverage/'],
 };
-
-// start livereload server for coverage
-if (args.live) {
-		let lr = livereload.createServer({ delay: 500 });
-		console.log('watching:', files.live);
-		lr.watch(files.live);
-}
 
 function notifyFailure(err) {
 	// silence jshint warning about possible strict violation (W040)
@@ -74,4 +73,14 @@ gulp.task('test', () => {
 
 gulp.task('test:watch', ['test'], () => {
 	gulp.watch([].concat(files.sources, files.tests), ['test']);
+
+	if (args.coverage) {
+		// start local webserver for watching coverage report
+		gulp.src(`${__dirname}/../coverage/lcov-report`)
+			.pipe(lr_server({
+				port: COVERAGE_PORT,
+				livereload: true,
+				open: args.open,
+			}));
+	}
 });

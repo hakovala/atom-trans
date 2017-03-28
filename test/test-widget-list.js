@@ -1,7 +1,8 @@
+/* jshint mocha: true */
 "use strict";
 
 const helper = require('./helper');
-const assert = require('./assert-extra');
+const assert = require('./assert/extras');
 
 const Widget = require('../lib/widget');
 const WidgetList = require('../lib/widget-list');
@@ -13,15 +14,7 @@ describe('WidgetList', () => {
 
 			assert(target)
 				.instanceOf(WidgetList)
-				.hasLength(0)
-		});
-
-		it('should create new empty instance WidgetList', () => {
-			let target = WidgetList();
-
-			assert(target)
-				.instanceOf(WidgetList)
-				.hasLength(0)
+				.hasLength(0);
 		});
 
 		it('should accept single HTMLElement as argument', () => {
@@ -29,11 +22,11 @@ describe('WidgetList', () => {
 			let target = new WidgetList(el);
 
 			assert(target)
-				.hasLength(1)
+				.hasLength(1);
 			assert(target[0])
-				.instanceOf(Widget)
+				.instanceOf(Widget);
 			assert(target[0].el)
-				.strictEqual(el)
+				.strictEqual(el);
 		});
 
 		it('should accept single Widget as argument', () => {
@@ -43,9 +36,9 @@ describe('WidgetList', () => {
 
 			assert(target)
 				.hasLength(1)
-				.includes(widget)
+				.includes(widget);
 			assert(target[0])
-				.strictEqual(widget)
+				.strictEqual(widget);
 		});
 
 		it('should accept array of HTMLElements as argument', () => {
@@ -54,7 +47,7 @@ describe('WidgetList', () => {
 			let target = new WidgetList(els);
 
 			assert(target)
-				.hasLength(count)
+				.hasLength(count);
 
 			els.forEach((el, i) => {
 				assert(target[i]).instanceOf(Widget);
@@ -68,7 +61,7 @@ describe('WidgetList', () => {
 			let target = new WidgetList(widgets);
 
 			assert(target)
-				.hasLength(count)
+				.hasLength(count);
 
 			widgets.forEach((widget, i) => {
 				assert(target[i]).strictEqual(widget);
@@ -94,7 +87,7 @@ describe('WidgetList', () => {
 
 			assert(target)
 				.instanceOf(WidgetList)
-				.hasLength(0)
+				.hasLength(0);
 		});
 		it('should convert HTMLElements to Widgets', () => {
 			let count = 5;
@@ -104,14 +97,14 @@ describe('WidgetList', () => {
 
 			assert(target)
 				.instanceOf(WidgetList)
-				.hasLength(count)
+				.hasLength(count);
 			els.forEach((el, i) => {
 				assert(target[i]).instanceOf(Widget);
 				assert(target[i].el).strictEqual(el);
 			});
 		});
 		it('should convert array-like object to WidgetList', () => {
-			let count = 2
+			let count = 2;
 			let items = {
 				length: count,
 				'0': new Widget(helper.element('div')),
@@ -122,13 +115,13 @@ describe('WidgetList', () => {
 
 			assert(target)
 				.instanceOf(WidgetList)
-				.hasLength(count)
+				.hasLength(count);
 
 			for (let i = 0; i < count; i++) {
 				let el = items[i];
 				assert(target[i])
 					.instanceOf(Widget)
-					.strictEqual(el)
+					.strictEqual(el);
 			}
 		});
 	});
@@ -143,7 +136,7 @@ describe('WidgetList', () => {
 			let actual = target.elements();
 			assert(actual)
 				.isArray()
-				.hasLength(count)
+				.hasLength(count);
 
 			els.forEach((el, i) => {
 				assert(actual[i]).strictEqual(el);

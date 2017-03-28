@@ -15,7 +15,7 @@ let instrumenter = new istanbul.Instrumenter();
 // collect the source files
 let files = sources
 	.map((src) => glob.sync(src))
-	.reduce((files, cur) => files.concat(cur))
+	.reduce((files, cur) => files.concat(cur));
 
 debug('sources: %o', files);
 

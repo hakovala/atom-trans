@@ -1,7 +1,8 @@
+/* jshint mocha: true */
 "use strict";
 
 const helper = require('./helper');
-const assert = require('./assert-dom');
+const assert = require('./assert/dom');
 
 const Widget = require('../lib/widget');
 
@@ -48,24 +49,23 @@ describe('Widget', () => {
 
 	describe('constructor', () => {
 		it('should throw an Error without element', () => {
-			assert.throws(() => {
+			assert(() => {
 				let widget = new Widget();
-			}, Error, 'Expected "not an element" error.');
+			}).throws(Error, 'Expected "not an element" error.');
 		});
 
 		it('should have given Element', () => {
 			let widget = new Widget(div);
-			assert.strictEqual(div, widget.el);
+			assert(widget.el).strictEqual(div);
 		});
 
 		it('should create instance of Widget', () => {
 			assert((new Widget(div)) instanceof Widget);
-			assert((Widget(div)) instanceof Widget);
 		});
 
 		it('should have read-only element', () => {
 			let widget = new Widget(div);
-			assert.throws(() => { widget.el = element(); }, TypeError);
+			assert(() => { widget.el = element(); }).throws(TypeError);
 		});
 	});
 
@@ -75,7 +75,7 @@ describe('Widget', () => {
 			let child = new Widget(query('#child-1'));
 
 			parent.remove(child);
-			assert.equal(false, parent.el.contains(child.el), 'Child was not removed');
+			assert(parent.el.contains(child.el)).isFalse('Child was not removed');
 		});
 
 		it('should remove child using HTMLElement', () => {
@@ -83,32 +83,32 @@ describe('Widget', () => {
 			let child = query('#child-1');
 
 			parent.remove(child);
-			assert.equal(false, parent.el.contains(child.el), 'Child was not removed');
+			assert(parent.el.contains(child.el)).isFalse('Child was not removed');
 		});
 
 		it('should remove child using selector', () => {
 			let parent = new Widget(query('#parent'));
 
-			assert.equal(4, parent.el.children.length, 'Failed pre-test child count check');
+			assert(parent.el).hasChildCount(4, 'Failed pre-test child count check');
 
 			parent.remove('#child-1');
-			assert.equal(3, parent.el.children.length);
-			assert.equal(false, contains('#child-1', parent.el));
+			assert(parent.el).hasChildCount(3);
+			assert(contains('#child-1', parent.el)).isFalse();
 
 			parent.remove('.child');
-			assert.equal(1, parent.el.children.length);
-			assert.equal(true, contains('#title', parent.el));
+			assert(parent.el).hasChildCount(1);
+			assert(contains('#title', parent.el));
 		});
 
 		it('should throw an error with invalid argument', () => {
 			let parent = new Widget(query('#parent'));
 
-			assert.throws(() => { parent.remove(); }, Error);
-			assert.throws(() => { parent.remove(null); }, Error);
-			assert.throws(() => { parent.remove(123); }, Error);
-			assert.throws(() => { parent.remove(function() {}); }, Error);
-			assert.throws(() => { parent.remove({}); }, Error);
-			assert.throws(() => { parent.remove([]); }, Error);
+			assert(() => { parent.remove(); }).throws(Error);
+			assert(() => { parent.remove(null); }).throws(Error);
+			assert(() => { parent.remove(123); }).throws(Error);
+			assert(() => { parent.remove(function() {}); }).throws(Error);
+			assert(() => { parent.remove({}); }).throws(Error);
+			assert(() => { parent.remove([]); }).throws(Error);
 		});
 	});
 
@@ -119,7 +119,7 @@ describe('Widget', () => {
 
 			let widget = new Widget(child);
 			widget.detach();
-			assert.equal(false, parent.contains(child));
+			assert(parent.contains(child)).isFalse();
 		});
 	});
 
@@ -130,7 +130,7 @@ describe('Widget', () => {
 
 			parent.append(child);
 			let children = parent.el.children;
-			assert.strictEqual(child.el, children[children.length - 1]);
+			assert(children[children.length - 1]).strictEqual(child.el);
 		});
 
 		it('should append HTMLElement to parent', () => {
@@ -139,19 +139,19 @@ describe('Widget', () => {
 
 			parent.append(child);
 			let children = parent.el.children;
-			assert.strictEqual(child, children[children.length - 1]);
+			assert(children[children.length - 1]).strictEqual(child);
 		});
 
 		it('should throw an error with invalid argument', () => {
 			let parent = new Widget(query('#parent'));
 
-			assert.throws(() => { parent.append(); }, Error);
-			assert.throws(() => { parent.append(true); }, Error);
-			assert.throws(() => { parent.append(null); }, Error);
-			assert.throws(() => { parent.append(123); }, Error);
-			assert.throws(() => { parent.append('Hello'); }, Error);
-			assert.throws(() => { parent.append({}); }, Error);
-			assert.throws(() => { parent.append([]); }, Error);
+			assert(() => { parent.append(); }).throws(Error);
+			assert(() => { parent.append(true); }).throws(Error);
+			assert(() => { parent.append(null); }).throws(Error);
+			assert(() => { parent.append(123); }).throws(Error);
+			assert(() => { parent.append('Hello'); }).throws(Error);
+			assert(() => { parent.append({}); }).throws(Error);
+			assert(() => { parent.append([]); }).throws(Error);
 		});
 	});
 
@@ -162,7 +162,7 @@ describe('Widget', () => {
 
 			child.appendTo(parent);
 			let children = parent.el.children;
-			assert.strictEqual(child.el, children[children.length - 1]);
+			assert(children[children.length - 1]).strictEqual(child.el);
 		});
 
 		it('should append self to parent HTMLElement', () => {
@@ -171,19 +171,19 @@ describe('Widget', () => {
 
 			child.appendTo(parent);
 			let children = parent.children;
-			assert.strictEqual(child.el, children[children.length - 1]);
+			assert(children[children.length - 1]).strictEqual(child.el);
 		});
 
 		it('should throw an error with invalid argument', () => {
 			let child = new Widget(element('li'));
 
-			assert.throws(() => { child.appendTo(); }, Error);
-			assert.throws(() => { child.appendTo(true); }, Error);
-			assert.throws(() => { child.appendTo(null); }, Error);
-			assert.throws(() => { child.appendTo(123); }, Error);
-			assert.throws(() => { child.appendTo('Hello'); }, Error);
-			assert.throws(() => { child.appendTo({}); }, Error);
-			assert.throws(() => { child.appendTo([]); }, Error);
+			assert(() => { child.appendTo(); }).throws(Error);
+			assert(() => { child.appendTo(true); }).throws(Error);
+			assert(() => { child.appendTo(null); }).throws(Error);
+			assert(() => { child.appendTo(123); }).throws(Error);
+			assert(() => { child.appendTo('Hello'); }).throws(Error);
+			assert(() => { child.appendTo({}); }).throws(Error);
+			assert(() => { child.appendTo([]); }).throws(Error);
 		});
 	});
 
@@ -194,7 +194,7 @@ describe('Widget', () => {
 
 			parent.prepend(child);
 			let children = parent.el.children;
-			assert.strictEqual(child.el, children[0]);
+			assert(children[0]).strictEqual(child.el);
 		});
 
 		it('should prepend HTMLElement to parent', () => {
@@ -203,19 +203,19 @@ describe('Widget', () => {
 
 			parent.prepend(child);
 			let children = parent.el.children;
-			assert.strictEqual(child, children[0]);
+			assert(children[0]).strictEqual(child);
 		});
 
 		it('should throw an error with invalid argument', () => {
 			let parent = new Widget(query('#parent'));
 
-			assert.throws(() => { parent.prepend(); }, Error);
-			assert.throws(() => { parent.prepend(true); }, Error);
-			assert.throws(() => { parent.prepend(null); }, Error);
-			assert.throws(() => { parent.prepend(123); }, Error);
-			assert.throws(() => { parent.prepend('Hello'); }, Error);
-			assert.throws(() => { parent.prepend({}); }, Error);
-			assert.throws(() => { parent.prepend([]); }, Error);
+			assert(() => { parent.prepend(); }).throws(Error);
+			assert(() => { parent.prepend(true); }).throws(Error);
+			assert(() => { parent.prepend(null); }).throws(Error);
+			assert(() => { parent.prepend(123); }).throws(Error);
+			assert(() => { parent.prepend('Hello'); }).throws(Error);
+			assert(() => { parent.prepend({}); }).throws(Error);
+			assert(() => { parent.prepend([]); }).throws(Error);
 		});
 	});
 
@@ -226,7 +226,7 @@ describe('Widget', () => {
 
 			child.prependTo(parent);
 			let children = parent.el.children;
-			assert.strictEqual(child.el, children[0]);
+			assert(children[0]).strictEqual(child.el);
 		});
 
 		it('should prepend self to parent HTMLElement', () => {
@@ -235,19 +235,19 @@ describe('Widget', () => {
 
 			child.prependTo(parent);
 			let children = parent.children;
-			assert.strictEqual(child.el, children[0]);
+			assert(children[0]).strictEqual(child.el);
 		});
 
 		it('should throw an error with invalid argument', () => {
 			let child = new Widget(element('li'));
 
-			assert.throws(() => { child.prependTo(); }, Error);
-			assert.throws(() => { child.prependTo(true); }, Error);
-			assert.throws(() => { child.prependTo(null); }, Error);
-			assert.throws(() => { child.prependTo(123); }, Error);
-			assert.throws(() => { child.prependTo('Hello'); }, Error);
-			assert.throws(() => { child.prependTo({}); }, Error);
-			assert.throws(() => { child.prependTo([]); }, Error);
+			assert(() => { child.prependTo(); }).throws(Error);
+			assert(() => { child.prependTo(true); }).throws(Error);
+			assert(() => { child.prependTo(null); }).throws(Error);
+			assert(() => { child.prependTo(123); }).throws(Error);
+			assert(() => { child.prependTo('Hello'); }).throws(Error);
+			assert(() => { child.prependTo({}); }).throws(Error);
+			assert(() => { child.prependTo([]); }).throws(Error);
 		});
 	});
 
@@ -258,7 +258,7 @@ describe('Widget', () => {
 
 			parent.insert(2, child);
 			let children = parent.el.children;
-			assert.strictEqual(child.el, children[2]);
+			assert(children[2]).strictEqual(child.el);
 		});
 
 		it('should insert HTMLElement to specific index', () => {
@@ -267,19 +267,19 @@ describe('Widget', () => {
 
 			parent.insert(2, child);
 			let children = parent.el.children;
-			assert.strictEqual(child, children[2]);
+			assert(children[2]).strictEqual(child);
 		});
 
 		it('should throw an error with invalid element', () => {
 			let parent = new Widget(query('#parent'));
 
-			assert.throws(() => { parent.insert(2); }, Error);
-			assert.throws(() => { parent.insert(2, true); }, Error);
-			assert.throws(() => { parent.insert(2, null); }, Error);
-			assert.throws(() => { parent.insert(2, 123); }, Error);
-			assert.throws(() => { parent.insert(2, 'Hello'); }, Error);
-			assert.throws(() => { parent.insert(2, {}); }, Error);
-			assert.throws(() => { parent.insert(2, []); }, Error);
+			assert(() => { parent.insert(2); }).throws(Error);
+			assert(() => { parent.insert(2, true); }).throws(Error);
+			assert(() => { parent.insert(2, null); }).throws(Error);
+			assert(() => { parent.insert(2, 123); }).throws(Error);
+			assert(() => { parent.insert(2, 'Hello'); }).throws(Error);
+			assert(() => { parent.insert(2, {}); }).throws(Error);
+			assert(() => { parent.insert(2, []); }).throws(Error);
 		});
 
 		it('should insert to first if index smaller than zero', () => {
@@ -288,7 +288,7 @@ describe('Widget', () => {
 
 			parent.insert(-1, child);
 			let children = parent.el.children;
-			assert.strictEqual(child, children[0]);
+			assert(children[0]).strictEqual(child);
 		});
 
 		it('should insert to last if index greater than children count', () => {
@@ -297,7 +297,7 @@ describe('Widget', () => {
 
 			parent.insert(parent.el.children.length, child);
 			let children = parent.el.children;
-			assert.strictEqual(child, children[children.length - 1]);
+			assert(children[children.length - 1]).strictEqual(child);
 		});
 	});
 
@@ -309,7 +309,7 @@ describe('Widget', () => {
 
 			child.insertAfter(other);
 			let children = parent.children;
-			assert.strictEqual(child.el, children[3]);
+			assert(children[3]).strictEqual(child.el);
 		});
 
 		it('should insert Widget after another HTMLElement', () => {
@@ -319,19 +319,19 @@ describe('Widget', () => {
 
 			child.insertAfter(other);
 			let children = parent.children;
-			assert.strictEqual(child.el, children[3]);
+			assert(children[3]).strictEqual(child.el);
 		});
 
 		it('should throw an error with invalid argument', () => {
 			let child = new Widget(element('li'));
 
-			assert.throws(() => { child.insertAfter(); }, Error);
-			assert.throws(() => { child.insertAfter(true); }, Error);
-			assert.throws(() => { child.insertAfter(null); }, Error);
-			assert.throws(() => { child.insertAfter(123); }, Error);
-			assert.throws(() => { child.insertAfter('Hello'); }, Error);
-			assert.throws(() => { child.insertAfter({}); }, Error);
-			assert.throws(() => { child.insertAfter([]); }, Error);
+			assert(() => { child.insertAfter(); }).throws(Error);
+			assert(() => { child.insertAfter(true); }).throws(Error);
+			assert(() => { child.insertAfter(null); }).throws(Error);
+			assert(() => { child.insertAfter(123); }).throws(Error);
+			assert(() => { child.insertAfter('Hello'); }).throws(Error);
+			assert(() => { child.insertAfter({}); }).throws(Error);
+			assert(() => { child.insertAfter([]); }).throws(Error);
 		});
 	});
 
@@ -343,7 +343,7 @@ describe('Widget', () => {
 
 			child.insertBefore(other);
 			let children = parent.children;
-			assert.strictEqual(child.el, children[2]);
+			assert(children[2]).strictEqual(child.el);
 		});
 
 		it('should insert Widget before another HTMLElement', () => {
@@ -353,19 +353,19 @@ describe('Widget', () => {
 
 			child.insertBefore(other);
 			let children = parent.children;
-			assert.strictEqual(child.el, children[2]);
+			assert(children[2]).strictEqual(child.el);
 		});
 
 		it('should throw an error with invalid argument', () => {
 			let child = new Widget(element('li'));
 
-			assert.throws(() => { child.insertBefore(); }, Error);
-			assert.throws(() => { child.insertBefore(true); }, Error);
-			assert.throws(() => { child.insertBefore(null); }, Error);
-			assert.throws(() => { child.insertBefore(123); }, Error);
-			assert.throws(() => { child.insertBefore('Hello'); }, Error);
-			assert.throws(() => { child.insertBefore({}); }, Error);
-			assert.throws(() => { child.insertBefore([]); }, Error);
+			assert(() => { child.insertBefore(); }).throws(Error);
+			assert(() => { child.insertBefore(true); }).throws(Error);
+			assert(() => { child.insertBefore(null); }).throws(Error);
+			assert(() => { child.insertBefore(123); }).throws(Error);
+			assert(() => { child.insertBefore('Hello'); }).throws(Error);
+			assert(() => { child.insertBefore({}); }).throws(Error);
+			assert(() => { child.insertBefore([]); }).throws(Error);
 		});
 	});
 
@@ -376,7 +376,7 @@ describe('Widget', () => {
 			let other = new Widget(parent.children[2]);
 
 			child.replace(other);
-			assert.strictEqual(child.el, parent.children[2]);
+			assert(parent.children[2]).strictEqual(child.el);
 		});
 
 		it('should replace HTMLElement with self', () => {
@@ -385,19 +385,19 @@ describe('Widget', () => {
 			let other = parent.children[2];
 
 			child.replace(other);
-			assert.strictEqual(child.el, parent.children[2]);
+			assert(parent.children[2]).strictEqual(child.el);
 		});
 
 		it('should throw an error with invalid argument', () => {
 			let child = new Widget(element('li'));
 
-			assert.throws(() => { child.replace(); }, Error);
-			assert.throws(() => { child.replace(true); }, Error);
-			assert.throws(() => { child.replace(null); }, Error);
-			assert.throws(() => { child.replace(123); }, Error);
-			assert.throws(() => { child.replace('Hello'); }, Error);
-			assert.throws(() => { child.replace({}); }, Error);
-			assert.throws(() => { child.replace([]); }, Error);
+			assert(() => { child.replace(); }).throws(Error);
+			assert(() => { child.replace(true); }).throws(Error);
+			assert(() => { child.replace(null); }).throws(Error);
+			assert(() => { child.replace(123); }).throws(Error);
+			assert(() => { child.replace('Hello'); }).throws(Error);
+			assert(() => { child.replace({}); }).throws(Error);
+			assert(() => { child.replace([]); }).throws(Error);
 		});
 	});
 
@@ -408,7 +408,7 @@ describe('Widget', () => {
 			let other = new Widget(element('div'));
 
 			child.replaceWith(other);
-			assert.strictEqual(other.el, parent.children[2]);
+			assert(parent.children[2]).strictEqual(other.el);
 		});
 
 		it('should replace self with HTMLElement', () => {
@@ -417,19 +417,19 @@ describe('Widget', () => {
 			let other = element('div');
 
 			child.replaceWith(other);
-			assert.strictEqual(other, parent.children[2]);
+			assert(parent.children[2]).strictEqual(other);
 		});
 
 		it('should throw an error with invalid argument', () => {
 			let child = new Widget(element('li'));
 
-			assert.throws(() => { child.replaceWith(); }, Error);
-			assert.throws(() => { child.replaceWith(true); }, Error);
-			assert.throws(() => { child.replaceWith(null); }, Error);
-			assert.throws(() => { child.replaceWith(123); }, Error);
-			assert.throws(() => { child.replaceWith('Hello'); }, Error);
-			assert.throws(() => { child.replaceWith({}); }, Error);
-			assert.throws(() => { child.replaceWith([]); }, Error);
+			assert(() => { child.replaceWith(); }).throws(Error);
+			assert(() => { child.replaceWith(true); }).throws(Error);
+			assert(() => { child.replaceWith(null); }).throws(Error);
+			assert(() => { child.replaceWith(123); }).throws(Error);
+			assert(() => { child.replaceWith('Hello'); }).throws(Error);
+			assert(() => { child.replaceWith({}); }).throws(Error);
+			assert(() => { child.replaceWith([]); }).throws(Error);
 		});
 	});
 
@@ -439,32 +439,32 @@ describe('Widget', () => {
 			let body = new Widget(document.body);
 
 			res = body.find('#parent');
-			assert.equal(1, res.length);
-			assert(res[0] instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(query('#parent'), res[0].el);
+			assert(res).hasLength(1);
+			assert(res[0]).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(res[0].el).strictEqual(query('#parent'));
 
 			res = body.find('.child');
-			assert.equal(3, res.length);
+			assert(res).hasLength(3);
 		});
 
 		it('should return empty set if no matching found', () => {
 			let body = new Widget(document.body);
 
 			let res = body.find('foo');
-			assert.equal(0, res.length);
+			assert(res).hasLength(0);
 		});
 
 		it('should throw error with invalid argument', () => {
 			let body = new Widget(document.body);
 
-			assert.throws(() => { body.find(); }, Error);
-			assert.throws(() => { body.find(true); }, Error);
-			assert.throws(() => { body.find(null); }, Error);
-			assert.throws(() => { body.find(123); }, Error);
-			assert.throws(() => { body.find({}); }, Error);
-			assert.throws(() => { body.find([]); }, Error);
-			assert.throws(() => { body.find(element('div')); }, Error);
-			assert.throws(() => { body.find(new Widget(element('div'))); }, Error);
+			assert(() => { body.find(); }).throws(Error);
+			assert(() => { body.find(true); }).throws(Error);
+			assert(() => { body.find(null); }).throws(Error);
+			assert(() => { body.find(123); }).throws(Error);
+			assert(() => { body.find({}); }).throws(Error);
+			assert(() => { body.find([]); }).throws(Error);
+			assert(() => { body.find(element('div')); }).throws(Error);
+			assert(() => { body.find(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 
@@ -472,14 +472,14 @@ describe('Widget', () => {
 		it('should return first child element', () => {
 			let target = new Widget(query('#parent'));
 			let first = target.first();
-			assert(first instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(target.el.firstElementChild, first.el);
+			assert(first).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(first.el).strictEqual(target.el.firstElementChild);
 		});
 
 		it('should return null if there is no child elements', () => {
 			let target = new Widget(query('#child-1'));
 			let first = target.first();
-			assert.strictEqual(null, first);
+			assert(first).isNull();
 		});
 	});
 
@@ -487,14 +487,14 @@ describe('Widget', () => {
 		it('should return last child element', () => {
 			let target = new Widget(query('#parent'));
 			let last = target.last();
-			assert(last instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(target.el.lastElementChild, last.el);
+			assert(last).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(last.el).strictEqual(target.el.lastElementChild);
 		});
 
 		it('should return null if there is no child elements', () => {
 			let target = new Widget(query('#child-1'));
 			let last = target.last();
-			assert.strictEqual(null, last);
+			assert(last).isNull();
 		});
 	});
 
@@ -502,37 +502,37 @@ describe('Widget', () => {
 		it('should return next element', () => {
 			let item = new Widget(query('#child-1'));
 			let next = item.next();
-			assert(next instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(query('#child-2'), next.el);
+			assert(next).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(next.el).strictEqual(query('#child-2'));
 		});
 
 		it('should return next matching element', () => {
 			let item = new Widget(query('#child-1'));
 			let next = item.next('#child-3');
-			assert(next instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(query('#child-3'), next.el);
+			assert(next).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(next.el).strictEqual(query('#child-3'));
 		});
 
 		it('should return null if there is no next', () => {
 			let item = new Widget(query('#child-3'));
-			assert.strictEqual(null, item.next());
+			assert(item.next()).isNull();
 		});
 
 		it('should return null if there is no matching next', () => {
 			let item = new Widget(query('#child-1'));
-			assert.strictEqual(null, item.next('foo'));
+			assert(item.next('foo')).isNull();
 		});
 
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
-			assert.throws(() => { target.next(true); }, Error);
-			assert.throws(() => { target.next(null); }, Error);
-			assert.throws(() => { target.next(123); }, Error);
-			assert.throws(() => { target.next({}); }, Error);
-			assert.throws(() => { target.next([]); }, Error);
-			assert.throws(() => { target.next(element('div')); }, Error);
-			assert.throws(() => { target.next(new Widget(element('div'))); }, Error);
+			assert(() => { target.next(true); }).throws(Error);
+			assert(() => { target.next(null); }).throws(Error);
+			assert(() => { target.next(123); }).throws(Error);
+			assert(() => { target.next({}); }).throws(Error);
+			assert(() => { target.next([]); }).throws(Error);
+			assert(() => { target.next(element('div')); }).throws(Error);
+			assert(() => { target.next(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 
@@ -544,7 +544,7 @@ describe('Widget', () => {
 
 			for (let i = 2, l = 0; i < parent.children.length; i++, l++) {
 				assert(next[l] instanceof Widget, 'Expected to be instanceof Widget');
-				assert.strictEqual(next[l].el, parent.children[i]);
+				assert(parent.children[i]).strictEqual(next[l].el);
 			}
 		});
 
@@ -554,9 +554,9 @@ describe('Widget', () => {
 			let next = item.nextAll('.last');
 
 			for (let i = 2, l = 0; i < parent.children.length; i++) {
-				if (!parent.children[i].matches('.last')) continue;
+				if (!parent.children[i].matches('.last')) { continue; }
 				assert(next[l] instanceof Widget, 'Expected to be instanceof Widget');
-				assert.strictEqual(next[l].el, parent.children[i]);
+				assert(parent.children[i]).strictEqual(next[l].el);
 				l++;
 			}
 		});
@@ -564,25 +564,25 @@ describe('Widget', () => {
 		it('should return empty set if there is no next', () => {
 			let item = new Widget(query('#child-3'));
 			let next = item.nextAll();
-			assert.equal(0, next.length);
+			assert(next).hasLength(0);
 		});
 
 		it('shoud return empty set if there is no matching next', () => {
 			let item = new Widget(query('#child-1'));
 			let next = item.nextAll('foo');
-			assert.equal(0, next.length);
+			assert(next).hasLength(0);
 		});
 
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
-			assert.throws(() => { target.nextAll(true); }, Error);
-			assert.throws(() => { target.nextAll(null); }, Error);
-			assert.throws(() => { target.nextAll(123); }, Error);
-			assert.throws(() => { target.nextAll({}); }, Error);
-			assert.throws(() => { target.nextAll([]); }, Error);
-			assert.throws(() => { target.nextAll(element('div')); }, Error);
-			assert.throws(() => { target.nextAll(new Widget(element('div'))); }, Error);
+			assert(() => { target.nextAll(true); }).throws(Error);
+			assert(() => { target.nextAll(null); }).throws(Error);
+			assert(() => { target.nextAll(123); }).throws(Error);
+			assert(() => { target.nextAll({}); }).throws(Error);
+			assert(() => { target.nextAll([]); }).throws(Error);
+			assert(() => { target.nextAll(element('div')); }).throws(Error);
+			assert(() => { target.nextAll(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 
@@ -590,37 +590,37 @@ describe('Widget', () => {
 		it('should return previous element', () => {
 			let item = new Widget(query('#child-2'));
 			let prev = item.previous();
-			assert(prev instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(query('#child-1'), prev.el);
+			assert(prev).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(prev.el).strictEqual(query('#child-1'));
 		});
 
 		it('should return previous matching element', () => {
 			let item = new Widget(query('#child-2'));
 			let prev = item.previous('h1');
-			assert(prev instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(query('#title'), prev.el);
+			assert(prev).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(prev.el).strictEqual(query('#title'));
 		});
 
 		it('should return null if there is no previous', () => {
 			let item = new Widget(query('#title'));
-			assert.strictEqual(null, item.previous());
+			assert(item.previous()).isNull();
 		});
 
 		it('should return null if there is no matching previous', () => {
 			let item = new Widget(query('#child-2'));
-			assert.strictEqual(null, item.previous('foo'));
+			assert(item.previous('foo')).isNull();
 		});
 
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
-			assert.throws(() => { target.previous(true); }, Error);
-			assert.throws(() => { target.previous(null); }, Error);
-			assert.throws(() => { target.previous(123); }, Error);
-			assert.throws(() => { target.previous({}); }, Error);
-			assert.throws(() => { target.previous([]); }, Error);
-			assert.throws(() => { target.previous(element('div')); }, Error);
-			assert.throws(() => { target.previous(new Widget(element('div'))); }, Error);
+			assert(() => { target.previous(true); }).throws(Error);
+			assert(() => { target.previous(null); }).throws(Error);
+			assert(() => { target.previous(123); }).throws(Error);
+			assert(() => { target.previous({}); }).throws(Error);
+			assert(() => { target.previous([]); }).throws(Error);
+			assert(() => { target.previous(element('div')); }).throws(Error);
+			assert(() => { target.previous(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 
@@ -633,7 +633,7 @@ describe('Widget', () => {
 
 			for (let i = 2, l = 0; i >= 0; i--, l++) {
 				assert(prev[l] instanceof Widget, 'Expected to be instanceof Widget');
-				assert.strictEqual(prev[l].el, parent.children[i]);
+				assert(parent.children[i]).strictEqual(prev[l].el);
 			}
 		});
 
@@ -644,9 +644,9 @@ describe('Widget', () => {
 			// TODO: Assert WidgetList
 
 			for (let i = 2, l = 0; i >= 0; i--) {
-				if (!parent.children[i].matches('.child')) continue;
+				if (!parent.children[i].matches('.child')) { continue; }
 				assert(prev[l] instanceof Widget, 'Expected to be instanceof Widget');
-				assert.strictEqual(prev[l].el, parent.children[i]);
+				assert(parent.children[i]).strictEqual(prev[l].el);
 				l++;
 			}
 		});
@@ -655,56 +655,56 @@ describe('Widget', () => {
 			let item = new Widget(query('#title'));
 			let prev = item.previousAll();
 			// TODO: Assert WidgetList
-			assert.equal(0, prev.length);
+			assert(prev).hasLength(0);
 		});
 
 		it('should return empty set if there is no matching elements', () => {
 			let item = new Widget(query('#child-2'));
 			let prev = item.previousAll('foo');
 			// TODO: Assert WidgetList
-			assert.equal(0, prev.length);
+			assert(prev).hasLength(0);
 		});
 
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
-			assert.throws(() => { target.previousAll(true); }, Error);
-			assert.throws(() => { target.previousAll(null); }, Error);
-			assert.throws(() => { target.previousAll(123); }, Error);
-			assert.throws(() => { target.previousAll({}); }, Error);
-			assert.throws(() => { target.previousAll([]); }, Error);
-			assert.throws(() => { target.previousAll(element('div')); }, Error);
-			assert.throws(() => { target.previousAll(new Widget(element('div'))); }, Error);
+			assert(() => { target.previousAll(true); }).throws(Error);
+			assert(() => { target.previousAll(null); }).throws(Error);
+			assert(() => { target.previousAll(123); }).throws(Error);
+			assert(() => { target.previousAll({}); }).throws(Error);
+			assert(() => { target.previousAll([]); }).throws(Error);
+			assert(() => { target.previousAll(element('div')); }).throws(Error);
+			assert(() => { target.previousAll(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 
 	describe('#matches', () => {
 		it('should return true if this matches the selector', () => {
 			let item = new Widget(element('div', 'title', 'item'));
-			assert.strictEqual(true, item.matches('div'));
-			assert.strictEqual(true, item.matches('#title'));
-			assert.strictEqual(true, item.matches('.item'));
-			assert.strictEqual(true, item.matches('#title.item'));
+			assert(item.matches('div')).isTrue();
+			assert(item.matches('#title')).isTrue();
+			assert(item.matches('.item')).isTrue();
+			assert(item.matches('#title.item')).isTrue();
 		});
 
 		it('should return false if this doesn\'t match the selector', () => {
 			let item = new Widget(element('div', 'title', 'item'));
-			assert.strictEqual(false, item.matches('foo'));
-			assert.strictEqual(false, item.matches('#bar'));
-			assert.strictEqual(false, item.matches('.baz'));
+			assert(item.matches('foo')).isFalse();
+			assert(item.matches('#bar')).isFalse();
+			assert(item.matches('.baz')).isFalse();
 		});
 
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
-			assert.throws(() => { target.matches(); }, Error);
-			assert.throws(() => { target.matches(true); }, Error);
-			assert.throws(() => { target.matches(null); }, Error);
-			assert.throws(() => { target.matches(123); }, Error);
-			assert.throws(() => { target.matches({}); }, Error);
-			assert.throws(() => { target.matches([]); }, Error);
-			assert.throws(() => { target.matches(element('div')); }, Error);
-			assert.throws(() => { target.matches(new Widget(element('div'))); }, Error);
+			assert(() => { target.matches(); }).throws(Error);
+			assert(() => { target.matches(true); }).throws(Error);
+			assert(() => { target.matches(null); }).throws(Error);
+			assert(() => { target.matches(123); }).throws(Error);
+			assert(() => { target.matches({}); }).throws(Error);
+			assert(() => { target.matches([]); }).throws(Error);
+			assert(() => { target.matches(element('div')); }).throws(Error);
+			assert(() => { target.matches(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 
@@ -714,40 +714,40 @@ describe('Widget', () => {
 			let child = new Widget(query('#child-1'));
 
 			let res = child.parent();
-			assert(res instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(parent, res.el);
+			assert(res).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(res.el).strictEqual(parent);
 		});
 
 		it('should return null if there is no parent', () => {
 			let target = new Widget(element('div'));
 
-			assert.strictEqual(null, target.parent());
+			assert(target.parent()).isNull();
 		});
 
 		it('should return parent that matches selector', () => {
 			let target = new Widget(query('#child-1'));
 
 			let res = target.parent('body');
-			assert(res instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(document.body, res.el);
+			assert(res).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(res.el).strictEqual(document.body);
 		});
 
 		it('should return null if no parent matches the selector', () => {
 			let target = new Widget(query('#child-1'));
 
-			assert.strictEqual(null, target.parent('foo'));
+			assert(target.parent('foo')).isNull();
 		});
 
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
-			assert.throws(() => { target.parent(true); }, Error);
-			assert.throws(() => { target.parent(null); }, Error);
-			assert.throws(() => { target.parent(123); }, Error);
-			assert.throws(() => { target.parent({}); }, Error);
-			assert.throws(() => { target.parent([]); }, Error);
-			assert.throws(() => { target.parent(element('div')); }, Error);
-			assert.throws(() => { target.parent(new Widget(element('div'))); }, Error);
+			assert(() => { target.parent(true); }).throws(Error);
+			assert(() => { target.parent(null); }).throws(Error);
+			assert(() => { target.parent(123); }).throws(Error);
+			assert(() => { target.parent({}); }).throws(Error);
+			assert(() => { target.parent([]); }).throws(Error);
+			assert(() => { target.parent(element('div')); }).throws(Error);
+			assert(() => { target.parent(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 
@@ -772,10 +772,10 @@ describe('Widget', () => {
 			let actual = target.parentAll();
 
 			// TODO: assert instanceof WidgetList
-			assert.equal(expected.length, actual.length);
+			assert(actual).hasLength(expected.length);
 			for (let i = 0; i < expected.length; i++) {
 				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
-				assert.strictEqual(expected[i], actual[i].el);
+				assert(actual[i].el).strictEqual(expected[i]);
 			}
 		});
 
@@ -783,7 +783,7 @@ describe('Widget', () => {
 			let target = new Widget(element('div'));
 
 			// TODO: assert instanceof WidgetList
-			assert.equal(0, target.parentAll().length);
+			assert(target.parentAll()).hasLength(0);
 		});
 
 		it('should return all matching parents', () => {
@@ -793,23 +793,23 @@ describe('Widget', () => {
 			let actual = target.parentAll('body');
 
 			// TODO: assert instanceof WidgetList
-			assert.equal(expected.length, actual.length);
+			assert(actual).hasLength(expected.length);
 			for (let i = 0; i < expected.length; i++) {
 				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
-				assert.strictEqual(expected[i], actual[i].el);
+				assert(actual[i].el).strictEqual(expected[i]);
 			}
 		});
 
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
-			assert.throws(() => { target.parentAll(true); }, Error);
-			assert.throws(() => { target.parentAll(null); }, Error);
-			assert.throws(() => { target.parentAll(123); }, Error);
-			assert.throws(() => { target.parentAll({}); }, Error);
-			assert.throws(() => { target.parentAll([]); }, Error);
-			assert.throws(() => { target.parentAll(element('div')); }, Error);
-			assert.throws(() => { target.parentAll(new Widget(element('div'))); }, Error);
+			assert(() => { target.parentAll(true); }).throws(Error);
+			assert(() => { target.parentAll(null); }).throws(Error);
+			assert(() => { target.parentAll(123); }).throws(Error);
+			assert(() => { target.parentAll({}); }).throws(Error);
+			assert(() => { target.parentAll([]); }).throws(Error);
+			assert(() => { target.parentAll(element('div')); }).throws(Error);
+			assert(() => { target.parentAll(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 
@@ -820,10 +820,10 @@ describe('Widget', () => {
 			let expected = target.el.children;
 			let actual = target.children();
 
-			assert.equal(expected.length, actual.length);
+			assert(actual.length).equal(expected.length);
 			for (let i = 0; i < expected.length; i++) {
-				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
-				assert.strictEqual(expected[i], actual[i].el);
+				assert(actual[i]).instanceOf(Widget, 'Expected to be instanceof Widget');
+				assert(actual[i].el).strictEqual(expected[i]);
 			}
 		});
 
@@ -833,23 +833,23 @@ describe('Widget', () => {
 			let expected = Array.from(target.el.children).filter((e) => e.matches('.child'));
 			let actual = target.children('.child');
 
-			assert.equal(expected.length, actual.length);
+			assert(actual.length).equal(expected.length);
 			for (let i = 0; i < expected.length; i++) {
 				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
-				assert.strictEqual(expected[i], actual[i].el);
+				assert(actual[i].el).strictEqual(expected[i]);
 			}
 		});
 
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
-			assert.throws(() => { target.children(true); }, Error);
-			assert.throws(() => { target.children(null); }, Error);
-			assert.throws(() => { target.children(123); }, Error);
-			assert.throws(() => { target.children({}); }, Error);
-			assert.throws(() => { target.children([]); }, Error);
-			assert.throws(() => { target.children(element('div')); }, Error);
-			assert.throws(() => { target.children(new Widget(element('div'))); }, Error);
+			assert(() => { target.children(true); }).throws(Error);
+			assert(() => { target.children(null); }).throws(Error);
+			assert(() => { target.children(123); }).throws(Error);
+			assert(() => { target.children({}); }).throws(Error);
+			assert(() => { target.children([]); }).throws(Error);
+			assert(() => { target.children(element('div')); }).throws(Error);
+			assert(() => { target.children(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 
@@ -861,10 +861,10 @@ describe('Widget', () => {
 			let expected = Array.from(parent.children).filter((e) => e !== target.el);
 			let actual = target.siblings();
 
-			assert.equal(expected.length, actual.length);
+			assert(actual.length).equal(expected.length);
 			for (let i = 0; i < expected.length; i++) {
-				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
-				assert.strictEqual(expected[i], actual[i].el);
+				assert(actual[i]).instanceOf(Widget, 'Expected to be instanceof Widget');
+				assert(actual[i].el).strictEqual(expected[i]);
 			}
 		});
 
@@ -875,10 +875,10 @@ describe('Widget', () => {
 			let expected = Array.from(parent.children).filter((e) => e !== target.el).filter((e) => e.matches('.child'));
 			let actual = target.siblings('.child');
 
-			assert.equal(expected.length, actual.length);
+			assert(actual.length).equal(expected.length);
 			for (let i = 0; i < expected.length; i++) {
-				assert(actual[i] instanceof Widget, 'Expected to be instanceof Widget');
-				assert.strictEqual(expected[i], actual[i].el);
+				assert(actual[i]).instanceOf(Widget, 'Expected to be instanceof Widget');
+				assert(actual[i].el).strictEqual(expected[i]);
 			}
 		});
 
@@ -886,19 +886,19 @@ describe('Widget', () => {
 			let target = new Widget(element('div'));
 
 			let actual = target.siblings();
-			assert.equal(0, actual.length);
+			assert(actual.length).equal(0);
 		});
 
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
-			assert.throws(() => { target.siblings(true); }, Error);
-			assert.throws(() => { target.siblings(null); }, Error);
-			assert.throws(() => { target.siblings(123); }, Error);
-			assert.throws(() => { target.siblings({}); }, Error);
-			assert.throws(() => { target.siblings([]); }, Error);
-			assert.throws(() => { target.siblings(element('div')); }, Error);
-			assert.throws(() => { target.siblings(new Widget(element('div'))); }, Error);
+			assert(() => { target.siblings(true); }).throws(Error);
+			assert(() => { target.siblings(null); }).throws(Error);
+			assert(() => { target.siblings(123); }).throws(Error);
+			assert(() => { target.siblings({}); }).throws(Error);
+			assert(() => { target.siblings([]); }).throws(Error);
+			assert(() => { target.siblings(element('div')); }).throws(Error);
+			assert(() => { target.siblings(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 
@@ -909,8 +909,8 @@ describe('Widget', () => {
 			let expected = target.el.closest('body');
 			let actual = target.closest('body');
 
-			assert(actual instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(expected, actual.el);
+			assert(actual).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(actual.el).strictEqual(expected);
 		});
 
 		it('should return closest matching element including self', () => {
@@ -919,20 +919,28 @@ describe('Widget', () => {
 			let expected = target.el;
 			let actual = target.closest('div');
 
-			assert(actual instanceof Widget, 'Expected to be instanceof Widget');
-			assert.strictEqual(expected, actual.el);
+			assert(actual).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(actual.el).strictEqual(expected);
+		});
+
+		it('should return null when none found', () => {
+			let target = new Widget(query('#child-2'));
+
+			let actual = target.closest('dummy');
+
+			assert(actual).isNull();
 		});
 
 		it('should throw error with invalid argument', () => {
 			let target = new Widget(document.body);
 
-			assert.throws(() => { target.closest(true); }, Error);
-			assert.throws(() => { target.closest(null); }, Error);
-			assert.throws(() => { target.closest(123); }, Error);
-			assert.throws(() => { target.closest({}); }, Error);
-			assert.throws(() => { target.closest([]); }, Error);
-			assert.throws(() => { target.closest(element('div')); }, Error);
-			assert.throws(() => { target.closest(new Widget(element('div'))); }, Error);
+			assert(() => { target.closest(true); }).throws(Error);
+			assert(() => { target.closest(null); }).throws(Error);
+			assert(() => { target.closest(123); }).throws(Error);
+			assert(() => { target.closest({}); }).throws(Error);
+			assert(() => { target.closest([]); }).throws(Error);
+			assert(() => { target.closest(element('div')); }).throws(Error);
+			assert(() => { target.closest(new Widget(element('div'))); }).throws(Error);
 		});
 	});
 });

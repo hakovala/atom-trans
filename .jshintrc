@@ -1,0 +1,27 @@
+{
+	// Stupid json non-comments {}
+	"maxerr": 100, // Maximum error before stopping
+
+	"esversion": 6, // ECMAScript version 6
+	"browser": true, // Browser
+	"node": true, // Node.js
+	"worker": true, // Web Workers
+
+	"strict": true, // Require all functions run in ES5 Strict Mode
+	"globalstrict": true, // Allow global "use strict"
+
+	"curly": true, // Require {} for every new block or scope
+	"freeze": true, // Prohibit overwriting prototypes of native objects
+
+	"eqeqeq": false, // No need for strict '===' comparisons
+	"eqnull": true, // Tolerate use of '== null'
+	"evil": false, // No evil eval
+	"undef": true, // Require all non-global variables to be declared (prevents global leaks)
+
+	"newcap": true, // Require capitalization of all constructor functions
+	"nonew": true, // Prohibit use of constructor for side-effects
+	"trailing": true,
+
+	// Additional predefined global variables
+	"globals": {}
+}
