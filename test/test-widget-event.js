@@ -496,6 +496,101 @@ describe('Widget Events', () => {
 		});
 	});
 
+	describe('emit', () => {
+		let fn;
+		let we;
+
+		beforeEach(() => {
+			fn = simple.stub();
+			we = new WidgetEvent(target);
+		});
+
+		afterEach(() => {
+			fn = null;
+		});
+
+		it('should trigger non-DOM events', () => {
+			we.addListener('hello', fn);
+
+			we.emit('hello', 1, 2, 3);
+			assert(fn.callCount).equal(1);
+			assert(fn.lastCall.args).deepEqual([1, 2, 3]);
+		});
+
+		it('should trigger DOM events', () => {
+			we.addListener('mouse:click', fn);
+
+			let evt = createMouseEvent('click', 1);
+			target.dispatchEvent(evt);
+
+			assert(fn.callCount).equal(1);
+			assert(fn.lastCall.arg).strictEqual(evt);
+		});
+
+		it('should trigger DOM events with and without capture flag', () => {
+			we.addListener('mouse:click', fn);
+			we.addListener('mouse:click', fn, true);
+
+			triggerMouseEvent(target, 'click', 1);
+		});
+
+		it('should trigger DOM events with selectors and with capture', () => {
+			let fn1 = simple.stub();
+			let fn2 = simple.stub();
+			let fn3 = simple.stub();
+			let fn4 = simple.stub();
+
+			we.addListener('mouse:click', fn1);
+			we.addListener('mouse:click', fn2, true);
+			we.addListener('mouse:click:button1', fn3);
+			we.addListener('mouse:click:button1', fn4, true);
+
+			triggerMouseEvent(target, 'click', 1);
+			assert(fn1.callCount).equal(1);
+			assert(fn2.callCount).equal(1);
+			assert(fn3.callCount).equal(1);
+			assert(fn4.callCount).equal(1);
+		});
+
+		it('should trigger specific DOM MouseEvent and KeyboardEvent', () => {
+			let fn1 = simple.stub();
+			let fn2 = simple.stub();
+
+			we.addListener('mouse:click', fn); // catch all
+			we.addListener('mouse:click:button1', fn1);
+			we.addListener('mouse:click:ctrl+button2', fn2);
+
+			triggerMouseEvent(target, 'click', 1);
+			assert(fn.callCount).equal(1);
+			assert(fn1.callCount).equal(1);
+			assert(fn2.callCount).equal(0);
+
+			triggerMouseEvent(target, 'click', 2, { ctrlKey: true });
+			assert(fn.callCount).equal(2);
+			assert(fn1.callCount).equal(1);
+			assert(fn2.callCount).equal(1);
+		});
+
+		it('should trigger specific DOM KeyboardEvent', () => {
+			let fn1 = simple.stub();
+			let fn2 = simple.stub();
+
+			we.addListener('key:press', fn); // catch all
+			we.addListener('key:press:space', fn1);
+			we.addListener('key:press:ctrl+enter', fn2);
+
+			triggerKeyEvent(target, 'keypress', 'space');
+			assert(fn.callCount).equal(1);
+			assert(fn1.callCount).equal(1);
+			assert(fn2.callCount).equal(0);
+
+			triggerKeyEvent(target, 'keypress', 'enter', { ctrlKey: true });
+			assert(fn.callCount).equal(2);
+			assert(fn1.callCount).equal(1);
+			assert(fn2.callCount).equal(1);
+		});
+	});
+
 	describe('once', () => {
 		let fn;
 		let we;
