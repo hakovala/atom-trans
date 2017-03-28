@@ -495,4 +495,24 @@ describe('Widget Events', () => {
 			assert(event_names).deepEqual(['click', 'click', 'keypress', 'keypress']);
 		});
 	});
+
+
+	describe('.prependListener', () => {
+		it('should throw "NOT IMPLEMENTED" error', () => {
+			assert(() => {
+				let we = new WidgetEvent(target);
+				we.prependListener();
+			}).throws(Error, 'Should throw an error');
+		});
+	});
+
+	describe('.prependOnceListener', () => {
+		it('should throw "NOT IMPLEMENTED" error', () => {
+			assert(() => {
+				let we = new WidgetEvent(target);
+				we.prependOnceListener();
+			}).throws(Error, 'Should throw an error');
+		});
+	});
+
 });
