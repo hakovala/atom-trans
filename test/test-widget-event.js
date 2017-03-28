@@ -496,6 +496,67 @@ describe('Widget Events', () => {
 		});
 	});
 
+	describe('once', () => {
+		let fn;
+		let we;
+
+		beforeEach(() => {
+			fn = simple.stub();
+			we = new WidgetEvent(target);
+		});
+
+		afterEach(() => {
+			fn = null;
+		});
+
+		it('should trigger only once for non-DOM events', () => {
+			we.once('hello', fn);
+			assert(we.eventNames()).hasLength(1).includes('hello');
+
+			we.emit('hello', 1, 2, 3);
+			assert(we.eventNames()).hasLength(0);
+			assert(fn.callCount).equal(1);
+			assert(fn.lastCall.args).deepEqual([1, 2, 3]);
+			fn.reset();
+
+			we.emit('hello', 3, 2, 1);
+			assert(fn.callCount).equal(0);
+		});
+
+		it('should trigger only once for DOM events', () => {
+			we.once('mouse:click', fn);
+			assert(we.eventNames()).hasLength(1).includes('mouse:click');
+
+			we.emit('mouse:click', 1, 2, 3);
+			assert(we.eventNames()).hasLength(0);
+		});
+
+		it('should trigger only once for capture DOM events', () => {
+			we.once('mouse:click', fn, true);
+			assert(we.eventNames()).hasLength(1).includes('mouse:click-capture');
+
+			we.emit('mouse:click-capture', 1, 2, 3);
+			assert(we.eventNames()).hasLength(0);
+		});
+
+		it('should only remove listener after called', () => {
+			we.once('hello', fn);
+			we.addListener('other', fn);
+
+			// non existing event
+			we.emit('world');
+			assert(we.eventNames()).includes('hello');
+			assert(fn.callCount).equal(0);
+			// different event
+			we.emit('other');
+			assert(we.eventNames()).includes('hello');
+			assert(fn.callCount).equal(1);
+			// wanted event
+			we.emit('hello');
+			assert(we.eventNames()).notIncludes('hello');
+			assert(fn.callCount).equal(2);
+		});
+	});
 
 	describe('.prependListener', () => {
 		it('should throw "NOT IMPLEMENTED" error', () => {
