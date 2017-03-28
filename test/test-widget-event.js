@@ -23,7 +23,7 @@ function createMouseEvent(type, button, options) {
 
 function triggerMouseEvent(element, type, button, options) {
 	let evt = createMouseEvent(type, button, options);
-	return element.dispatch(evt);
+	return element.dispatchEvent(evt);
 }
 
 function createKeyEvent(type, code, options) {
@@ -34,7 +34,7 @@ function createKeyEvent(type, code, options) {
 
 function triggerKeyEvent(element, type, key, options) {
 	let evt = createKeyEvent(type, key, options);
-	return element.dispatch(evt);
+	return element.dispatchEvent(evt);
 }
 
 describe('Widget Events', () => {
