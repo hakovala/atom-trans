@@ -102,6 +102,34 @@ describe('Widget Events', () => {
 			});
 		});
 
+		describe('getSelectorFromEvent', () => {
+			it('should throw error with unknown event', () => {
+				assert(() => {
+					WidgetEvent.getSelectorFromEvent(new InputEvent());
+				}).throws(Error, 'Should throw Error for unknown event type');
+			});
+
+			it('should return formatted selector form MouseEvent', () => {
+				let actual;
+
+				actual = WidgetEvent.getSelectorFromEvent(createMouseEvent('click', 1, { altKey: true, ctrlKey: true, shiftKey: true, metaKey: true }));
+				assert(actual).equal('alt+ctrl+shift+meta+button1');
+
+				actual = WidgetEvent.getSelectorFromEvent(createMouseEvent('click', 2, { altKey: false, ctrlKey: false, shiftKey: false, metaKey: false }));
+				assert(actual).equal('button2');
+			});
+
+			it('should return formatted selector from KeyboardEvent', () => {
+				let actual;
+
+				actual = WidgetEvent.getSelectorFromEvent(createKeyEvent('keypress', 'Space', { altKey: true, ctrlKey: true, shiftKey: true, metaKey: true }));
+				assert(actual).equal('alt+ctrl+shift+meta+space');
+
+				actual = WidgetEvent.getSelectorFromEvent(createKeyEvent('keydown', 'Enter', { altKey: false, ctrlKey: false, shiftKey: false, metaKey: false }));
+				assert(actual).equal('enter');
+			});
+		});
+
 		describe('parseSelector', () => {
 			it('should throw Error with non-string selector', () => {
 				assert(() => {
