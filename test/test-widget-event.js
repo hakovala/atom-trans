@@ -1,6 +1,6 @@
 /* jshint mocha: true */
 // TODO: wtf, jshint doesn't know about `KeyboardEvent` object?
-/* global KeyboardEvent */
+/* global KeyboardEvent, InputEvent */
 "use strict";
 
 const debug = require('debug')('test-events');
