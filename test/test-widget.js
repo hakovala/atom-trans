@@ -67,6 +67,14 @@ describe('Widget', () => {
 			let widget = new Widget(div);
 			assert(() => { widget.el = element(); }).throws(TypeError);
 		});
+
+		it('should clone existing Widget', () => {
+			let other = new Widget(div);
+			let widget = new Widget(other);
+
+			assert(widget.el).strictEqual(other.el);
+			assert(widget).notStrictEqual(other);
+		});
 	});
 
 	describe('#remove', () => {
