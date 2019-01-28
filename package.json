@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "main": "index.js",
   "devDependencies": {
-    "debug": "^2.6.3",
+    "debug": "^4.1.1",
     "glob": "^7.1.1",
-    "gulp": "^3.9.1",
-    "gulp-jsdoc3": "^1.0.1",
+    "gulp": "^4.0.0",
+    "gulp-jsdoc3": "^2.0.0",
     "gulp-mochelec": "github:hakovala/gulp-mochelec",
     "gulp-server-livereload": "^1.9.2",
     "gulp-util": "^3.0.8",
@@ -14,7 +14,7 @@
     "jaguarjs-jsdoc": "^1.0.2",
     "minimist": "^1.2.0",
     "node-notifier": "^5.1.2",
-    "simple-mock": "^0.7.3",
-    "through2": "^2.0.3"
+    "simple-mock": "^0.8.0",
+    "through2": "^3.0.0"
   }
 }
