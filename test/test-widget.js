@@ -27,11 +27,6 @@ describe('Widget', () => {
 		return query(selector, parent) !== null;
 	}
 
-	// convert a array-like object to array
-	function toArray(list) {
-		return [].slice.call(list);
-	}
-
 	beforeEach(() => {
 		// ensure that we have a clean Element to play with
 		div = element();
@@ -45,6 +40,48 @@ describe('Widget', () => {
 			</div>
 			<p id="other">Hello, Other!</p>
 		`;
+	});
+
+	describe('static #query', () => {
+		it('should return widget', () => {
+			let widget = Widget.query('#title');
+			assert(widget.el).strictEqual(query('#title'));
+		});
+		it('should return null for no-matches', () => {
+			let widget = Widget.query('#NONE');
+			assert(widget).strictEqual(null);
+		});
+		it('should query from HTMLElement parent', () => {
+			let widget = Widget.query('div', query('#parent'));
+			assert(widget.el).strictEqual(query('#child-1'));
+		});
+		it('should query from Widget parent', () => {
+			let widget = Widget.query('div', new Widget(query('#parent')));
+			assert(widget.el).strictEqual(query('#child-1'));
+		});
+	});
+
+	describe('static #queryAll', () => {
+		it('should return Array of widgets', () => {
+			let res = Widget.queryAll('#parent');
+			assert(res).hasLength(1);
+			assert(res[0]).instanceOf(Widget, 'Expected to be instance of Widget');
+			assert(res[0].el).strictEqual(query('#parent'));
+		});
+		it('should query from HTMLElement parent', () => {
+			let res = Widget.queryAll('div', query('#parent'));
+			assert(res).hasLength(3);
+			assert(res[0].el).strictEqual(query('#child-1'));
+		});
+		it('should query from Widget parent', () => {
+			let res = Widget.queryAll('div', new Widget(query('#parent')));
+			assert(res).hasLength(3);
+			assert(res[0].el).strictEqual(query('#child-1'));
+		});
+		it('should return empty set if no matching found', () => {
+			let res = Widget.queryAll('foo');
+			assert(res).hasLength(0);
+		});
 	});
 
 	describe('constructor', () => {
