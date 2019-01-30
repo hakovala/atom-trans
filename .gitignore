@@ -37,3 +37,4 @@ jspm_packages
 
 
 doc/
+package-lock.json
