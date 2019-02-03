@@ -1,8 +1,7 @@
-"use strict";
-
-const path = require('path');
-const gulp = require('gulp');
+const { src, dest, parallel, series, watch } = require('gulp');
 const gutil = require('gulp-util');
+const path = require('path');
+
 const mochelec = require('gulp-mochelec');
 const notifier = require('node-notifier');
 const through = require('through2');
@@ -21,17 +20,17 @@ let args = require('minimist')(process.argv.slice(2), {
 	],
 });
 
-// Command line arguments:
-// `coverage`: generate code coverage from unit tests
-// 'live': start livereload server watching coverage reports
-// 'tests': unit test files to run as glob patterns
-// 'filter': grep pattern to filter unit tests
-
 let files = {
 	sources: ['index.js', 'lib/**/*.js'],
 	tests: args.tests || ['test/test-*.js'],
 	live: ['coverage/'],
 };
+
+// Command line arguments:
+// `coverage`: generate code coverage from unit tests
+// 'live': start livereload server watching coverage reports
+// 'tests': unit test files to run as glob patterns
+// 'filter': grep pattern to filter unit tests
 
 function notifyFailure(err) {
 	// silence jshint warning about possible strict violation (W040)
@@ -59,28 +58,31 @@ function notifyPass() {
 	});
 }
 
-gulp.task('test', () => {
-	return gulp.src(files.tests, { read: false })
-		.pipe(mochelec({
-			renderer: true,
-			require: args.coverage ? 'test/support/require-coverage.js' : undefined,
-			hook: args.coverage ? 'test/support/hook-coverage.js' : undefined,
-			grep: args.filter,
-		}))
+function test() {
+	const test_options = {
+		renderer: true,
+		grep: args.filter,
+	};
+	if (args.coverage) {
+		test_options.require = 'test/support/require-coverage.js';
+		test_options.hook = 'test/support/hook-coverage.js';
+	}
+	return src(files.tests, { read: false })
+		.pipe(mochelec(test_options))
 		.on('error', notifyFailure)
 		.pipe(notifyPass());
-});
+}
 
-gulp.task('test:watch', ['test'], () => {
-	gulp.watch([].concat(files.sources, files.tests), ['test']);
+function test_watch() {
+	const sources = [].concat(files.sources, files.tests);
+	watch(sources, test);
+	return src(`${__dirname}/../coverage/lcov-report`)
+		.pipe(lr_server({
+			port: COVERAGE_PORT,
+			livereload: true,
+			open: args.open,
+		}));
+}
 
-	if (args.coverage) {
-		// start local webserver for watching coverage report
-		gulp.src(`${__dirname}/../coverage/lcov-report`)
-			.pipe(lr_server({
-				port: COVERAGE_PORT,
-				livereload: true,
-				open: args.open,
-			}));
-	}
-});
+exports.default = test;
+exports.watch = series(test, test_watch);

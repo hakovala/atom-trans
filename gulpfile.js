@@ -1,8 +1,24 @@
 "use strict";
 
-const gulp = require('gulp');
+const { src, dest, parallel, watch } = require('gulp');
+const gutil = require('gulp-util');
 
-require('./gulp/unit-tests');
-require('./gulp/documentation');
+const tasks = {};
+function exportTasks(module, prefix) {
+	for (let name in module) {
+		const task = module[name];
+		if (prefix) {
+			if (name === 'default') {
+				name = prefix;
+			} else {
+				name = `${prefix}:${name}`;
+			}
+		}
+		tasks[name] = task;
+	}
+}
 
-gulp.task('default', ['test', 'doc']);
+exportTasks(require('./gulp/unit-tests'), 'test');
+exportTasks(require('./gulp/documentation'), 'doc');
+tasks.default = parallel(tasks.test, tasks.doc);
+module.exports = tasks;

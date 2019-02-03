@@ -1,14 +1,22 @@
 "use strict";
 
-const gulp = require('gulp');
+const { src, dest, parallel, series, watch } = require('gulp');
 const jsdoc = require('gulp-jsdoc3');
 
-let files = {
+const files = {
 	sources: ['index.js', 'lib/**/*.js'],
 };
 
-gulp.task('doc', (cb) => {
-	let config = require('../jsdoc.json');
-	gulp.src(['README.md'].concat(files.sources), { read: false })
-		.pipe(jsdoc(config, cb));
-});
+const doc_config = require('../jsdoc.json');
+
+function doc(cb) {
+	src(['README.md'].concat(files.sources), { read: false })
+		.pipe(jsdoc(doc_config, cb));
+}
+
+function doc_watch() {
+	watch(files.sources, doc);
+}
+
+exports.default = doc;
+exports.watch = series(doc, doc_watch);
