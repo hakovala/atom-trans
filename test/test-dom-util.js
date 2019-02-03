@@ -1,6 +1,10 @@
 /* jshint mocha: true */
 "use strict";
 
+require('log-node')();
+const l = require('log').get('test');
+
+const helper = require('./helper');
 const assert = require('./assert/dom');
 
 const DomUtil = require('../lib/dom-util');
@@ -247,6 +251,136 @@ describe('DOM Util', () => {
 		it('should return null with non-element', () => {
 			let actual = DomUtil.findParent(null, 'foo');
 			assert(actual).isNull();
+		});
+	});
+
+	describe('#updateElementAll', () => {
+		beforeEach(() => {
+			document.body.innerHTML = `
+				<div id="header-1" class="header">
+					<h1 class="title">Hello</h1>
+					<p>Lorem ipsum!</p>
+				</div>
+			`;
+		});
+
+		it('should use object keys as selectors', () => {
+			let el = helper.query('#header-1');
+			
+			DomUtil.updateElementAll(el, {
+				'.title': { '_': "World" },
+				'p': { 
+					'.data-lang': 'EN',
+					'_': 'Something else!',
+				}
+			});
+
+			assert(helper.query('.title').textContent).equal('World');
+			assert(helper.query('p').getAttribute('data-lang')).equal('EN');
+			assert(helper.query('p').textContent).equal('Something else!');
+		});
+	});
+
+	describe('#updateElement', () => {
+		beforeEach(() => {
+			document.body.innerHTML = `
+				<div id="header-1" class="header">
+					<h1 class="title">Hello</h1>
+					<p>Lorem ipsum!</p>
+					<p class="footer">Footer</p> 
+				</div>
+			`;
+		});
+
+		it('should change nothing with unknown names', () => {
+			let el = helper.query('#header-1');
+			let target = el.querySelector('.title');
+			const expected = target.outerHTML;
+
+			DomUtil.updateElement(el, '.title', {
+				'hello': "world",
+			});
+
+			assert(target.outerHTML).equal(expected);
+		})
+
+		it('should replace text of matching element', () => {
+			let el = helper.query('#header-1');
+			let target = el.querySelector('.title');
+			
+			DomUtil.updateElement(el, '.title', { '_': "World" });
+
+			assert(target.textContent).equal('World');
+		});
+
+		it('should replace html of matching element', () => {
+			let el = helper.query('#header-1');
+			let target = el.querySelector('.title');
+			
+			DomUtil.updateElement(el, '.title', { '$': "<b>jotain</b>" });
+
+			assert(target.innerHTML).equal('<b>jotain</b>');
+			assert(target.querySelector('b').textContent).equal('jotain');
+		});
+
+		it('should replace id of matching element', () => {
+			let el = helper.query('#header-1');
+			let target = el.querySelector('.title');
+			
+			DomUtil.updateElement(el, '.title', { '#': "world" });
+
+			assert(target.id).equal('world');
+		});
+
+		it('should replace class of matching element', () => {
+			let el = helper.query('#header-1');
+			let target = el.querySelector('.title');
+			
+			DomUtil.updateElement(el, '.title', { '.': "hello world" });
+
+			assert(target.classList.contains('hello')).isTrue();
+			assert(target.classList.contains('world')).isTrue();
+		});
+
+		it('should replace attribute of matching element', () => {
+			let el = helper.query('#header-1');
+			let target = el.querySelector('.title');
+			
+			DomUtil.updateElement(el, '.title', { 
+				'.hello': "world",
+				'.data-hello': "something",
+			});
+
+			assert(target.getAttribute('hello')).equal('world');
+			assert(target.getAttribute('data-hello')).equal('something');
+		});
+
+		it('should change all matching elements', () => {
+			let el = helper.query('#header-1');
+			let targets = el.querySelectorAll('p');
+
+			DomUtil.updateElement(el, 'p', { '_': "world" });
+
+			Array.from(targets).forEach((target) => {
+				assert(target.textContent).equal('world');
+			});
+		});
+
+		it('should resolve value from function', () => {
+			let el = helper.query('#header-1');
+			
+			let count = 0;
+			DomUtil.updateElement(el, 'p', { 
+				'_': (target) => {
+					return 'title-' + (++count);
+				}
+			});
+
+			assert(count).equal(2);
+			let actuals = el.querySelectorAll('p');
+			Array.from(actuals).forEach((actual, index) => {
+				assert(actual.textContent).equal('title-' + (index + 1));
+			});
 		});
 	});
 });
