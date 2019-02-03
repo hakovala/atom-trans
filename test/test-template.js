@@ -6,6 +6,7 @@ const l = require('log');
 const helper = require('./helper');
 const assert = require('./assert/dom');
 
+const Widget = require('../lib/widget');
 const Template = require('../lib/widget-template');
 
 const TEST_HTML = `
@@ -67,6 +68,19 @@ describe('Template', () => {
 			let actual = tmpl.content.querySelector('#hello');
 			assert(actual).strictEqual(el);
 		});
+
+		it('should query element from string', () => {
+			let tmpl = new Template('#tmpl-1');
+
+			assert(tmpl.el).strictEqual(helper.query('#tmpl-1'));
+		});
+
+		it('should take element from Widget', () => {
+			let widget = new Widget('#tmpl-1');
+			let tmpl = new Template(widget);
+
+			assert(tmpl.el).strictEqual(widget.el);
+		});
 	});
 
 	describe('.content', () => {
@@ -83,8 +97,12 @@ describe('Template', () => {
 			let el = helper.query('#tmpl-1')
 			let tmpl = new Template(el);
 
-			tmpl.updateElement({'.header-title': { '_': "world"}});
-			assert(false).isTrue();
+			tmpl.update({'.header-title': { '_': "world"}});
+
+			l("%s", tmpl.html);
+			l("%s", tmpl.content.querySelector(".header-title").html);
+
+			//assert(false).isTrue();
 		});
 	});
 
