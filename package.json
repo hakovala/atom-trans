@@ -12,6 +12,8 @@
     "gulp-util": "^3.0.8",
     "istanbul": "^0.4.5",
     "jaguarjs-jsdoc": "^1.0.2",
+    "log": "^3.2.0",
+    "log-node": "^3.2.1",
     "minimist": "^1.2.0",
     "node-notifier": "^5.1.2",
     "simple-mock": "^0.8.0",
