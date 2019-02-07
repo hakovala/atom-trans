@@ -3,7 +3,6 @@ const gutil = require('gulp-util');
 const path = require('path');
 
 const mochelec = require('gulp-mochelec');
-const notifier = require('node-notifier');
 const through = require('through2');
 const lr_server = require('gulp-server-livereload');
 
@@ -37,23 +36,11 @@ function notifyFailure(err) {
 	/* jshint validthis: true */
 
 	gutil.log("Failure: " + err.message);
-	notifier.notify({
-		'expire-time': TIMEOUT_FAIL,
-		icon: IMAGE_FAIL,
-		title: "Failed",
-		message: err.message
-	});
 	this.emit('end');
 }
 
 function notifyPass() {
 	return through.obj((file, enc, cb) => {
-		notifier.notify({
-			'expire-time': TIMEOUT_PASS,
-			icon: IMAGE_PASS,
-			title: "Pass",
-			message: "All unit tests passed."
-		});
 		cb(null, file);
 	});
 }
