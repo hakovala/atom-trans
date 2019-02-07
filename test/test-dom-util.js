@@ -1,7 +1,6 @@
 /* jshint mocha: true */
 "use strict";
 
-require('log-node')();
 const l = require('log').get('test');
 
 const helper = require('./helper');
