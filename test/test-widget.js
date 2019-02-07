@@ -502,6 +502,41 @@ describe('Widget', () => {
 		it('should throw error with invalid argument', () => {
 			let body = new Widget(document.body);
 
+			assert(() => { body.findAll(); }).throws(Error);
+			assert(() => { body.findAll(true); }).throws(Error);
+			assert(() => { body.findAll(null); }).throws(Error);
+			assert(() => { body.findAll(123); }).throws(Error);
+			assert(() => { body.findAll({}); }).throws(Error);
+			assert(() => { body.findAll([]); }).throws(Error);
+			assert(() => { body.findAll(element('div')); }).throws(Error);
+			assert(() => { body.findAll(new Widget(element('div'))); }).throws(Error);
+		});
+	});
+
+	describe('#find', () => {
+		it('should return matching child element', () => {
+			let res;
+			let body = new Widget(document.body);
+
+			res = body.find('#parent');
+			assert(res).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(res.el).strictEqual(query('#parent'));
+
+			res = body.find('.child');
+			assert(res).instanceOf(Widget, 'Expected to be instanceof Widget');
+			assert(res.id).equal('child-1');
+		});
+
+		it('should return null if no match found', () => {
+			let body = new Widget(document.body);
+
+			let res = body.find('foo');
+			assert(res).isNull();
+		});
+
+		it('should throw error with invalid argument', () => {
+			let body = new Widget(document.body);
+
 			assert(() => { body.find(); }).throws(Error);
 			assert(() => { body.find(true); }).throws(Error);
 			assert(() => { body.find(null); }).throws(Error);
