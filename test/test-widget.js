@@ -478,24 +478,24 @@ describe('Widget', () => {
 		});
 	});
 
-	describe('#find', () => {
+	describe('#findAll', () => {
 		it('should return matching child elements', () => {
 			let res;
 			let body = new Widget(document.body);
 
-			res = body.find('#parent');
+			res = body.findAll('#parent');
 			assert(res).hasLength(1);
 			assert(res[0]).instanceOf(Widget, 'Expected to be instanceof Widget');
 			assert(res[0].el).strictEqual(query('#parent'));
 
-			res = body.find('.child');
+			res = body.findAll('.child');
 			assert(res).hasLength(3);
 		});
 
 		it('should return empty set if no matching found', () => {
 			let body = new Widget(document.body);
 
-			let res = body.find('foo');
+			let res = body.findAll('foo');
 			assert(res).hasLength(0);
 		});
 
