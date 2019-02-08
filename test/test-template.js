@@ -14,6 +14,7 @@ const TEST_HTML = `
 	<div class="header">
 		<h1 class="header-title">Title</h1>
 		<p>Lorem ipsum!</p>
+		<p id="other">Second paragraph</p>
 	</div>
 </template>
 <template>
@@ -93,26 +94,67 @@ describe('Template', () => {
 	});
 
 	describe('#update', () => {
+		it('should ignore null data', () => {
+			let el = helper.query('#tmpl-1');
+			let tmpl = new Template(el);
+
+			tmpl.update(null);
+		});
+
 		it('should update template values', () => {
 			let el = helper.query('#tmpl-1')
 			let tmpl = new Template(el);
 
-			tmpl.update({'.header-title': { '_': "world"}});
+			const el_title = helper.query('.header-title', tmpl.content);
+			const el_p = helper.query('p', tmpl.content);
+			tmpl.update({
+				'.header-title': { '_': "world"},
+				'p': {
+					'#': 'content',
+					'_': "Hello World!",
+				},
+			});
 
-			l("%s", tmpl.html);
-			l("%s", tmpl.content.querySelector(".header-title").html);
-
-			//assert(false).isTrue();
+			assert(el_title.textContent).equal('world');
+			assert(el_p.id).equal('content');
+			assert(el_p.textContent).equal('Hello World!');
 		});
 	});
 
 	describe('#updateElement', () => {
-		it('should update template values for elements matching selector', () => {
+		it('should ignore missing selector', () => {
+			let el = helper.query('#tmpl-1');
+			let tmpl = new Template(el);
+
+			tmpl.updateElement(null, { '#': 'title' });
+		});
+
+		it('should ignore null data', () => {
 			let el = helper.query('#tmpl-1');
 			let tmpl = new Template(el);
 
 			tmpl.updateElement('.header-title', { '#': 'title' });
-			assert(false).isTrue();
+		});
+
+		it('should update template values for elements matching selector', () => {
+			let el = helper.query('#tmpl-1');
+			let tmpl = new Template(el);
+
+			const el_title = helper.query('.header-title', el.content);
+			tmpl.updateElement('.header-title', { '#': 'title' });
+
+			assert(el_title.id).equal('title');
+		});
+
+		it('should update all matching elements', () => {
+			let el = helper.query('#tmpl-1');
+			let tmpl = new Template(el);
+
+			const el_paragraphs = helper.queryAll('p', tmpl.content);
+			tmpl.updateElement('p', { '#': 'title' });
+
+			assert(el_paragraphs).hasLength(2);
+			el_paragraphs.forEach(el => assert(el.id).equal('title'));
 		});
 	});
 
