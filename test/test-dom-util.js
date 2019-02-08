@@ -1,6 +1,7 @@
 /* jshint mocha: true */
 "use strict";
 
+require('log-node')();
 const l = require('log').get('test');
 
 const helper = require('./helper');
@@ -250,6 +251,16 @@ describe('DOM Util', () => {
 		it('should return null with non-element', () => {
 			let actual = DomUtil.findParent(null, 'foo');
 			assert(actual).isNull();
+		});
+	});
+
+	describe('#create', () => {
+		it('should create elements', () =>  {
+			let el = DomUtil.create('#title.hello.world', "Hello World!");
+
+			assert(el.id).equal('title');
+			assert(el.className).equal('hello world');
+			assert(el.textContent).equal('Hello World!');
 		});
 	});
 });

@@ -18,5 +18,8 @@
     "node-notifier": "^5.1.2",
     "simple-mock": "^0.8.0",
     "through2": "^3.0.0"
+  },
+  "dependencies": {
+    "dom-create-element-query-selector": "^1.0.5"
   }
 }
