@@ -53,6 +53,8 @@ function test() {
 	if (args.coverage) {
 		test_options.require = 'test/support/require-coverage.js';
 		test_options.hook = 'test/support/hook-coverage.js';
+	} else {
+		test_options.require = 'test/support/require-log.js';
 	}
 	return src(files.tests, { read: false })
 		.pipe(mochelec(test_options))

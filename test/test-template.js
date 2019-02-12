@@ -1,6 +1,5 @@
 /* jshint mocha: true */
 
-require('log-node')();
 const l = require('log');
 
 const helper = require('./helper');
