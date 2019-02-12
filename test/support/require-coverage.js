@@ -1,5 +1,7 @@
 "use strict";
 
+require('./require-log');
+
 const util = require('util');
 const path = require('path');
 const glob = require('glob');
