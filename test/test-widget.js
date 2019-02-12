@@ -831,6 +831,30 @@ describe('Widget', () => {
 		});
 	});
 
+	describe('#rootNode', () => {
+		it('should return HTML Document as root parent', () => {
+			let target = new Widget(query('#child-1'));
+
+			let res = target.rootNode();
+			assert(res).instanceOf(HTMLDocument);
+		});
+
+		it('should return self with no parents', () => {
+			let target = new Widget(element('div'));
+
+			assert(target.rootNode()).strictEqual(target.el);
+		});
+
+		it('should return root node', () => {
+			let parent = element('div');
+			let target = new Widget(element('div'));
+			target.appendTo(parent);
+
+			let res = target.rootNode();
+			assert(res).strictEqual(parent);
+		})
+	});
+
 	describe('#parentAll', () => {
 
 		// helper method to get parent elements, with or without selector
